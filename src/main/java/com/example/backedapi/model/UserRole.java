@@ -13,7 +13,7 @@ import java.util.UUID;
 public class UserRole  implements Serializable {
     @Id
     @GeneratedValue
-    private UUID id;
+    private UUID key;
     @ManyToOne
     private Role role;
     @ManyToOne
