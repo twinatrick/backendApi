@@ -1,9 +1,30 @@
+version: "3.9"
 services:
-  sqlserver:
-    image: 'mcr.microsoft.com/mssql/server:latest'
+  postgres:
+    image: 'postgres:latest'
     environment:
-      - 'ACCEPT_EULA=yes'
-      - 'MSSQL_PID=express'
-      - 'MSSQL_SA_PASSWORD=verYs3cret'
+        - 'POSTGRES_USER=postgres'
+        - 'POSTGRES_PASSWORD=verYs3cret'
+        - 'POSTGRES_DB=postgres'
+        - 'POSTGRES_HOST_AUTH_METHOD=trust'
     ports:
-      - '1433'
+        - '5432:5432'
+#  backend:
+##    build: .
+#    ports:
+#        - '8080:8080'
+#    depends_on:
+#        - postgres
+#    environment:
+#        - 'DATABASE_URL=postgres://postgres:verYs3cret@postgres:5432/postgres'
+volumes:
+  postgres_data:
+
+#  sqlserver:
+#    image: 'mcr.microsoft.com/mssql/server:latest'
+#    environment:
+#      - 'ACCEPT_EULA=yes'
+#      - 'MSSQL_PID=express'
+#      - 'MSSQL_SA_PASSWORD=verYs3cret'
+#    ports:
+#      - '1433'
