@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 //@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)	// 本身包含 @Configuration 設定
@@ -32,26 +33,31 @@ public class SecurityConfig {
         return auth.getAuthenticationManager();
     }
     @Bean
-    public SecurityFilterChain  configure(HttpSecurity http) throws Exception {
-        String[] permitted = new String[] {"/login", "/vendor/**", "/css/**", "/js/**", "/home/**","/user**"};
-        http.csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement( httpSecuritySessionManagementConfigurer -> {
-                    httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-                })
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers(permitted).permitAll()
-                                .anyRequest().permitAll()
+    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+        String[] permitted = new String[] {
+                "/login",
+                "/vendor/**",
+                "/css/**",
+                "/js/**",
+                "/home/**",
+                "/user/**",
+                "/users/info",
+                "/api/auth/**"  // 修正為 "/api/auth/**"
+        };
+
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-         ;
-//        http.addFilterBefore(jwtAuthenticationTokenFilter, JwtAuthenticationTokenFilter.class);
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(permitted).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
-//                .and()
-//                .csrf()
-//                .disable()
-//                .logout();
-        // This method will be used to configure the security
-        // of the application
     }
 
 }

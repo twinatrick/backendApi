@@ -2,12 +2,15 @@ package com.example.backedapi.Repository;
 
 import com.example.backedapi.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.UUID;
 
 
 public interface UserRepository extends JpaRepository<User, UUID> {
-//    User findByEmail(String email);
+    @Query("select u from User u where u.email = ?1")
+   List<User> findByEmail(String email);
 //
 //    User findByPhone(String phone);
 //

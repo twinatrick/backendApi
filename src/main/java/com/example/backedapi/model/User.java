@@ -26,5 +26,10 @@ public class User implements Serializable {
     private String phone;
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private List<UserRole> roles;
+    @Transient
+    private List<String> roleArr;
+
+    @Transient
+    private List<Function> permissions;
 
 }
