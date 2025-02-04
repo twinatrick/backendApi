@@ -2,6 +2,7 @@ package com.example.backedapi.Controller;
 
 import com.example.backedapi.Repository.UserRepository;
 import com.example.backedapi.Service.UserService;
+import com.example.backedapi.annotation.Ingnore;
 import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
 import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.LoginRequest;
@@ -45,6 +46,7 @@ public class AuthController {
     private  HttpServletRequest request;
 
     // 註冊
+    @Ingnore
     @PostMapping("/signup")
     public ResponseType<?> signup(@RequestBody SignupRequest request) throws JoseException {
         if (!userService.getUserByEmail(request.getEmail()).isEmpty()) {
@@ -64,6 +66,8 @@ public class AuthController {
     }
 
     // 登入
+
+    @Ingnore
     @PostMapping("/login")
     public ResponseType<?> login(@RequestBody LoginRequest request) throws JoseException {
         List<User> user = userService.getUserByEmail(request.getEmail());

@@ -53,7 +53,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             "/api/auth/**"  // 修正為 "/api/auth/**"
     };
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
-@Autowired
+    @Autowired
     private  UserRepository userRepository;
     public JwtAuthenticationTokenFilter(){
 //        SECRET_KEY = generateSecretKey();

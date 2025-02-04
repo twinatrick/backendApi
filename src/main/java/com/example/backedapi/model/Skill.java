@@ -13,18 +13,21 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 @Getter
 @Setter
 @RequiredArgsConstructor
-@Table
 @Entity
-public class Role implements Serializable {
+@Table
+public class Skill implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID key;
+    private UUID key ;
+    //skill Name
     private String name;
+
+    //技能描述
     private String description;
-    private String permissions;
     @CreatedBy
     private String createdBy;
     @LastModifiedBy
@@ -33,10 +36,7 @@ public class Role implements Serializable {
     private Date createdTime;
     @LastModifiedDate
     private Date updatedTime;
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<UserRole> userRoles;
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<RoleFunction> roleFunctions;
 
-
+    @OneToMany(mappedBy = "skill",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private List<SkillMapUserAndProject> skillMapUserAndProjects;
 }

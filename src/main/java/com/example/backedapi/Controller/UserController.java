@@ -1,12 +1,16 @@
 
 package com.example.backedapi.Controller;
 
+import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.Service.UserService;
 import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
 import com.example.backedapi.model.Function;
 import com.example.backedapi.model.User;
+import com.example.backedapi.model.Vo.BindUserSkillOrProject;
 import com.example.backedapi.model.Vo.ResponseType;
 import jakarta.servlet.http.Cookie;
+import lombok.Getter;
+import lombok.Setter;
 import org.jose4j.jwt.JwtClaims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +35,9 @@ public class UserController {
 
 
     private final HttpServletRequest request;
+    private final User currentUser;
     private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private SkillService skillService;
 
 //    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
 //    public boolean createUser(@RequestBody User user) {
@@ -56,36 +62,37 @@ public class UserController {
 
     @GetMapping("/info")
     public ResponseType<?> getUserInfo(
-    ) throws InvalidJwtException {
-        AtomicReference<String> token = new AtomicReference<>("");
-        Cookie[] cookies=request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie!=null){
-                    String name=  cookie.getName();
-                    String value =cookie.getValue();
-                    if (Objects.equals(name, "v3-admin-vite-token-key"))
-                        token.set(value);
-                }
-
-
-
-
-        }
-        if(token.get() ==null|| token.get().isEmpty()) throw new NullPointerException("Token is null");
-        token.set(token.get().replace("Bearer", "").trim());
-        JwtClaims claims = jwtAuthenticationTokenFilter.verifyJWT(token.get());
-        String email = (String) claims.getClaimValue("email");
-        User user = userService.getUserByEmail(email).getFirst();
+    ) {
+//        AtomicReference<String> token = new AtomicReference<>("");
+//        Cookie[] cookies=request.getCookies();
+//        for (Cookie cookie : cookies) {
+//            if (cookie!=null){
+//                    String name=  cookie.getName();
+//                    String value =cookie.getValue();
+//                    if (Objects.equals(name, "v3-admin-vite-token-key"))
+//                        token.set(value);
+//                }
+//
+//
+//
+//
+//        }
+//        if(token.get() ==null|| token.get().isEmpty()) throw new NullPointerException("Token is null");
+//        token.set(token.get().replace("Bearer", "").trim());
+//        JwtClaims claims = jwtAuthenticationTokenFilter.verifyJWT(token.get());
+//        String email = (String) claims.getClaimValue("email");
+//        User user = userService.getUserByEmail(email).getFirst();
+        User user = currentUser;
         List<Function> functionList=new ArrayList<>();
         String FirstId= UUID.randomUUID().toString();
         String secondID=UUID.randomUUID().toString();
 //        functionList.add(new Function( ).setId(FirstId));
         Function f=new Function();
-        f.setId(FirstId);
+        f.setId(UUID.fromString(FirstId));
         f.setName("System");
         functionList.add(f);
         Function f2=new Function();
-        f2.setId(secondID);
+        f2.setId(UUID.fromString(secondID));
         f2.setName("User");
         f2.setParent(FirstId);
         functionList.add(f2);
@@ -98,5 +105,17 @@ public class UserController {
         // information
         return new ResponseType<>(user);
     }
+
+    @PostMapping("/BindUserSkillOrProject")
+    public ResponseType<String> BindUserSkillOrProject(@RequestBody BindUserSkillOrProject body) {
+        if(body.getType().equals("skill")){
+            skillService.BindSkillToUser(body.getSkill(),body.getUserId());
+        }else if(body.getType().equals("project")){
+            skillService.BindSkillToProjectAndUser(body.getSkill(),body.getProjectId(),body.getUserId());
+        }
+
+        return new ResponseType<>(0, "Bind updated successfully");
+    }
+
 
 }

@@ -22,28 +22,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder() ;
+        return new BCryptPasswordEncoder();
     }
+
     @Bean
     public AuthenticationManager authenticationManagerBean(
             AuthenticationConfiguration auth
     ) throws Exception {
         return auth.getAuthenticationManager();
     }
+
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-        String[] permitted = new String[] {
-                "/login",
-                "/vendor/**",
-                "/css/**",
-                "/js/**",
-                "/home/**",
-                "/user/**",
-                "/users/info",
-                "/api/auth/**"  // 修正為 "/api/auth/**"
-        };
+
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -52,7 +46,6 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(permitted).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
