@@ -173,4 +173,44 @@ public class RoleService {
     }
 
 
+
+    public List<Function> getFunctionByRole(Role role) {
+        if (role.getKey() == null) {
+            throw new IllegalArgumentException("Key must not be null");
+        }
+        role=roleRepository.findById(role.getKey()).orElseThrow(
+                ()->new IllegalArgumentException("Role not found")
+        );
+        return role.getRoleFunctions().stream().map(RoleFunction::getFunction).toList();
+    }
+    public List<Role> getRoleByFunction(Function function) {
+        if (function.getId() == null) {
+            throw new IllegalArgumentException("Key must not be null");
+        }
+        function=functionRepository.findById(function.getId()).orElseThrow(
+                ()->new IllegalArgumentException("Function not found")
+        );
+        return function.getRoleFunctions().stream().map(RoleFunction::getRole).toList();
+    }
+
+    public List<User> getUserByRole(Role role) {
+        if (role.getKey() == null) {
+            throw new IllegalArgumentException("Key must not be null");
+        }
+        role = roleRepository.findById(role.getKey()).orElseThrow(
+                () -> new IllegalArgumentException("Role not found")
+        );
+        return role.getUserRoles().stream().map(UserRole::getUser).toList();
+    }
+
+    public List<Role> getRoleByUser(User user) {
+        if (user.getKey() == null) {
+            throw new IllegalArgumentException("Key must not be null");
+        }
+        user = userRepository.findById(user.getKey()).orElseThrow(
+                () -> new IllegalArgumentException("User not found")
+        );
+        return user.getRoles().stream().map(UserRole::getRole).toList();
+    }
+
 }

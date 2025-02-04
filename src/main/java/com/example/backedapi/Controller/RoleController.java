@@ -224,4 +224,64 @@ public class RoleController {
         return response;
     }
 
+    @PostMapping("/getFunctionByRole")
+    public ResponseType<List<Function>> getFunctionByRole(@RequestBody Role role) {
+        ResponseType<List<Function>> response = new ResponseType<>();
+        try {
+            List<Function> functions = roleService.getFunctionByRole(role);
+            response.setData(functions);
+            response.setMessage("Function fetched successfully");
+            response.setCode(0);
+        } catch (Exception e) {
+            response.setCode(-1);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("/getRoleByFunction")
+    public ResponseType<List<Role>> getRoleByFunction(@RequestBody Function function) {
+        ResponseType<List<Role>> response = new ResponseType<>();
+        try {
+            List<Role> roles = roleService.getRoleByFunction(function);
+            response.setData(roles);
+            response.setMessage("Role fetched successfully");
+            response.setCode(0);
+        } catch (Exception e) {
+            response.setCode(-1);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("/getRoleByUser")
+    public ResponseType<List<Role>> getRoleByUser(@RequestBody User user) {
+        ResponseType<List<Role>> response = new ResponseType<>();
+        try {
+            List<Role> roles = roleService.getRoleByUser(user);
+            response.setData(roles);
+            response.setMessage("Role fetched successfully");
+            response.setCode(0);
+        } catch (Exception e) {
+            response.setCode(-1);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
+    @PostMapping("/getUserByRole")
+    public ResponseType<List<User>> getUserByRole(@RequestBody Role role) {
+        ResponseType<List<User>> response = new ResponseType<>();
+        try {
+            List<User> users = roleService.getUserByRole(role);
+            response.setData(users);
+            response.setMessage("User fetched successfully");
+            response.setCode(0);
+        } catch (Exception e) {
+            response.setCode(-1);
+            response.setMessage(e.getMessage());
+        }
+        return response;
+    }
+
 }
