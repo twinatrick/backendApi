@@ -28,37 +28,39 @@ public class FunctionController {
     @PostMapping("/add")
     public ResponseType<?> addFunction(@RequestBody Function function) {
         try {
-            function=  functionService.addFunction(function);
-        }catch (Exception e){
-            return new ResponseType<>( -1,null,"Error adding function");
+            function = functionService.addFunction(function);
+        } catch (Exception e) {
+            return new ResponseType<>(-1, null, "Error adding function");
         }
 
-        return new ResponseType<>( 0,function);
+        return new ResponseType<>(0, function);
     }
+
     @PostMapping("/update")
 
     public ResponseType<String> updateFunction(@RequestBody Function function) {
         try {
             functionService.updateFunction(function);
-        }catch (Exception e){
-            return new ResponseType<>( -1,"Error updating function");
+        } catch (Exception e) {
+            return new ResponseType<>(-1, "Error updating function");
         }
 
-        return new ResponseType<>( 0,"Function updated successfully");
+        return new ResponseType<>(0, "Function updated successfully");
     }
+
     @PostMapping("/delete")
     public ResponseType<String> deleteFunction(@RequestBody Function function) {
         try {
             functionService.deleteFunction(function);
-        }catch (Exception e){
-            return new ResponseType<>( -1,"Error deleting function");
+        } catch (Exception e) {
+            return new ResponseType<>(-1, "Error deleting function");
         }
 
-        return new ResponseType<>( 0,"Function deleted successfully");
+        return new ResponseType<>(0, "Function deleted successfully");
     }
 
     @GetMapping("/get")
     public ResponseType<List<Function>> getFunction() {
-        return new ResponseType<>( 0,functionService.getFunction());
+        return new ResponseType<>(0, functionService.getFunction());
     }
 }

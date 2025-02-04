@@ -43,14 +43,15 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private final HmacKey SECRET_KEY;
     int expirationTime= 1000 * 60 * 60 * 24 * 36500;
     String[] permitted = new String[] {
-            "/login",
-            "/vendor/**",
-            "/css/**",
-            "/js/**",
-            "/home/**",
-            "/user/**",
-            "/users/info",
-            "/api/auth/**"  // 修正為 "/api/auth/**"
+            "/**"
+//            "/login",
+//            "/vendor/**",
+//            "/css/**",
+//            "/js/**",
+//            "/home/**",
+//            "/user/**",
+//            "/users/info",
+//            "/api/auth/**"  // 修正為 "/api/auth/**"
     };
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
     @Autowired
@@ -123,7 +124,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         // 如果是免驗證路徑，直接跳過
         String requestPath = req.getServletPath();
         logger.debug("JWT 過濾器處理路徑: " + requestPath);
-
+//        return  ;
         // 如果路徑在跳過列表中，直接放行
         for (String permittedPath : permitted) {
             if (pathMatcher.match(permittedPath, requestPath)) {

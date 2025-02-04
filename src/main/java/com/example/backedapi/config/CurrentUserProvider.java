@@ -9,42 +9,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Example;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.annotation.RequestScope;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
-@RequiredArgsConstructor
+
 @Configuration
 public class CurrentUserProvider {
-   private final UserService userService;
 
-    private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
-
-    private final HttpServletRequest request;
     @Bean
     @RequestScope
-    User currentUser() throws InvalidJwtException {
-        AtomicReference<String> token = new AtomicReference<>("");
-        Cookie[] cookies=request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie!=null){
-                String name=  cookie.getName();
-                String value =cookie.getValue();
-                if (Objects.equals(name, "v3-admin-vite-token-key"))
-                    token.set(value);
-            }
-
-
-
-
-        }
-        if(token.get() ==null|| token.get().isEmpty()) throw new NullPointerException("Token is null");
-        token.set(token.get().replace("Bearer", "").trim());
-        JwtClaims claims = jwtAuthenticationTokenFilter.verifyJWT(token.get());
-        String email = (String) claims.getClaimValue("email");
-        return userService.getUserByEmail(email).getFirst();
+    User currentUser(HttpServletRequest request) {
+        return (User) request.getAttribute("user");
     }
 }

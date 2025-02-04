@@ -15,6 +15,7 @@ import org.jose4j.jwt.JwtClaims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jose4j.jwt.consumer.InvalidJwtException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,17 +27,22 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
     // This is a simple controller class that
     // will be used to handle the user requests
+    @Autowired
+    private  UserService userService;
 
-    private final UserService userService;
+    @Autowired
+    private  HttpServletRequest request;
 
+    @Autowired
+    private  User currentUser;
 
-    private final HttpServletRequest request;
-    private final User currentUser;
-    private final JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    @Autowired
+    private  JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+    @Autowired
     private SkillService skillService;
 
 //    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
@@ -61,7 +67,7 @@ public class UserController {
 //    }
 
     @GetMapping("/info")
-    public ResponseType<?> getUserInfo(
+    public ResponseType<User> getUserInfo(
     ) {
 //        AtomicReference<String> token = new AtomicReference<>("");
 //        Cookie[] cookies=request.getCookies();
