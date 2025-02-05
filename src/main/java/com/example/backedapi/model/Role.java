@@ -1,7 +1,12 @@
 package com.example.backedapi.model;
 
+import com.example.backedapi.model.Vo.RoleOutVo;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -10,14 +15,19 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Table
 @Entity
+@NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "key")
+
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,18 +35,29 @@ public class Role implements Serializable {
     private String name;
     private String description;
     private String permissions;
-    @CreatedBy
     private String createdBy;
-    @LastModifiedBy
     private String updatedBy;
-    @CreatedDate
     private Date createdTime;
-    @LastModifiedDate
     private Date updatedTime;
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<UserRole> userRoles;
-    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<RoleFunction> roleFunctions;
+    @JsonIgnore
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<UserRole> userRoles =new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<RoleFunction> roleFunctions =new ArrayList<>();
 
+    public RoleOutVo transToVo(){
+        RoleOutVo roleOutVo = new RoleOutVo();
+        roleOutVo.setKey(this.key);
+        roleOutVo.setName(this.name);
+        roleOutVo.setDescription(this.description);
+        roleOutVo.setPermissions(this.permissions);
+        roleOutVo.setCreatedBy(this.createdBy);
+        roleOutVo.setUpdatedBy(this.updatedBy);
+        roleOutVo.setCreatedTime(this.createdTime);
+        roleOutVo.setUpdatedTime(this.updatedTime);
+        roleOutVo.setFunctionKeys(this.roleFunctions.stream().map(RoleFunction::getFunction).map(Function::getId).map(UUID::toString).toList());
+        return roleOutVo;
+    }
 
 }

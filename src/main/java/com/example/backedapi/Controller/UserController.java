@@ -8,6 +8,7 @@ import com.example.backedapi.model.Function;
 import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.BindUserSkillOrProject;
 import com.example.backedapi.model.Vo.ResponseType;
+import com.example.backedapi.model.Vo.UserVo;
 import jakarta.servlet.http.Cookie;
 import lombok.Getter;
 import lombok.Setter;
@@ -45,54 +46,24 @@ public class UserController {
     @Autowired
     private SkillService skillService;
 
-//    @PostMapping(value = "/create", consumes = "application/json", produces = "application/json")
-//    public boolean createUser(@RequestBody User user) {
-//        UUID key = user.getKey();
-//        if (key != null) {
-//            throw new IllegalArgumentException("User already exists");
-//        }
-//        userService.createUser(user);
-//        // This method will be used to create a new user
-//        return true;
-//    }
-//
-//    @GetMapping("/getAllUser")
-//    public List<User> getUsers() {
-//        // This method will be used to get all the users
-//        // from the database
-////        userRepository.findAll();
-//        List<User> users = userService.getUser();
-//        System.out.println(users);
-//        return users;
-//    }
+    @PostMapping(value = "/create")
+    public boolean createUser(@RequestBody User user) {
+        UUID key = user.getKey();
+        if (key != null) {
+            throw new IllegalArgumentException("User already exists");
+        }
+        userService.createUser(user);
+        // This method will be used to create a new user
+        return true;
+    }
 
     @GetMapping("/info")
     public ResponseType<User> getUserInfo(
     ) {
-//        AtomicReference<String> token = new AtomicReference<>("");
-//        Cookie[] cookies=request.getCookies();
-//        for (Cookie cookie : cookies) {
-//            if (cookie!=null){
-//                    String name=  cookie.getName();
-//                    String value =cookie.getValue();
-//                    if (Objects.equals(name, "v3-admin-vite-token-key"))
-//                        token.set(value);
-//                }
-//
-//
-//
-//
-//        }
-//        if(token.get() ==null|| token.get().isEmpty()) throw new NullPointerException("Token is null");
-//        token.set(token.get().replace("Bearer", "").trim());
-//        JwtClaims claims = jwtAuthenticationTokenFilter.verifyJWT(token.get());
-//        String email = (String) claims.getClaimValue("email");
-//        User user = userService.getUserByEmail(email).getFirst();
         User user = currentUser;
         List<Function> functionList=new ArrayList<>();
         String FirstId= UUID.randomUUID().toString();
         String secondID=UUID.randomUUID().toString();
-//        functionList.add(new Function( ).setId(FirstId));
         Function f=new Function();
         f.setId(UUID.fromString(FirstId));
         f.setName("System");
@@ -122,6 +93,13 @@ public class UserController {
 
         return new ResponseType<>(0, "Bind updated successfully");
     }
+    @GetMapping("/getAllUser")
+    public ResponseType<List<UserVo>> getAllUser() {
+        return new ResponseType<>( 0,userService.getUser().stream().map(User::toUserVo).toList());
+        // This method will be used to get all the users
+        // from the database
+        }
+
 
 
 }

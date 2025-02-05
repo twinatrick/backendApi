@@ -7,10 +7,7 @@ import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
 import com.example.backedapi.model.Function;
 import com.example.backedapi.model.Role;
 import com.example.backedapi.model.User;
-import com.example.backedapi.model.Vo.LoginRequest;
-import com.example.backedapi.model.Vo.PermissionVo;
-import com.example.backedapi.model.Vo.ResponseType;
-import com.example.backedapi.model.Vo.SignupRequest;
+import com.example.backedapi.model.Vo.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jose4j.lang.JoseException;
@@ -31,11 +28,11 @@ public class RoleController {
     private RoleService roleService;
 
     @PostMapping("/add")
-    public ResponseType<Role> addRole(@RequestBody Role role) {
-        ResponseType<Role> response = new ResponseType<>();
+    public ResponseType<RoleOutVo> addRole(@RequestBody Role role) {
+        ResponseType<RoleOutVo> response = new ResponseType<>();
         try {
             role= roleService.addRole(role);
-            response.setData(role);
+            response.setData(role.transToVo());
             response.setMessage("Role added successfully");
             response.setCode(0);
         } catch (Exception e) {
@@ -46,10 +43,10 @@ public class RoleController {
     }
 
     @PostMapping("/get")
-    public ResponseType<List<Role>> getRole() {
-        ResponseType<List<Role>> response = new ResponseType<>();
+    public ResponseType<List<RoleOutVo>> getRole() {
+        ResponseType<List<RoleOutVo>> response = new ResponseType<>();
         try {
-            List<Role> roles = roleService.getRole();
+            List<RoleOutVo> roles = roleService.getRole();
             response.setData(roles);
             response.setMessage("Role fetched successfully");
             response.setCode(0);
@@ -61,11 +58,11 @@ public class RoleController {
     }
 
     @PostMapping("/update")
-    public ResponseType<Role> updateRole(@RequestBody Role role) {
-        ResponseType<Role> response = new ResponseType<>();
+    public ResponseType<RoleOutVo> updateRole(@RequestBody Role role) {
+        ResponseType<RoleOutVo> response = new ResponseType<>();
         try {
             roleService.updateRole(role);
-            response.setData(role);
+            response.setData(role.transToVo());
             response.setMessage("Role updated successfully");
             response.setCode(0);
         } catch (Exception e) {
@@ -90,13 +87,13 @@ public class RoleController {
         return response;
     }
     @PostMapping("/roleBindFunction")
-    public ResponseType<Role> roleBindFunction(@RequestBody PermissionVo permissionVo) {
-        ResponseType<Role> response = new ResponseType<>();
+    public ResponseType<RoleOutVo> roleBindFunction(@RequestBody PermissionVo permissionVo) {
+        ResponseType<RoleOutVo> response = new ResponseType<>();
         try {
-            Role role = permissionVo.getRole();
-            List<Function> functions = permissionVo.getFunctionList();
+            Role role = roleService.getRoleByIdList(List.of(permissionVo.getRole() )).getFirst();
+            List<Function> functions = roleService.getFunctionByIdList(permissionVo.getFunctionList());
             roleService.roleBindFunction(role, functions);
-            response.setData(role);
+            response.setData(role.transToVo());
             response.setMessage("Role binded with function successfully");
             response.setCode(0);
         } catch (Exception e) {
@@ -109,8 +106,8 @@ public class RoleController {
     public ResponseType<Function> functionBindRole(@RequestBody PermissionVo permissionVo) {
         ResponseType<Function> response = new ResponseType<>();
         try {
-            Function function = permissionVo.getFunction();
-            List<Role> roles = permissionVo.getRoleList();
+            Function function = roleService.getFunctionByIdList(List.of(permissionVo.getFunction() )).getFirst();
+            List<Role> roles = roleService.getRoleByIdList(permissionVo.getRoleList());
             roleService.functionBindRole(function, roles);
             response.setData(function);
             response.setMessage("Function binded with role successfully");
@@ -126,8 +123,8 @@ public class RoleController {
     public ResponseType<Role> roleBindUser(@RequestBody PermissionVo permissionVo) {
         ResponseType<Role> response = new ResponseType<>();
         try {
-            Role role = permissionVo.getRole();
-            List<User> users = permissionVo.getUserList();
+            Role role = roleService.getRoleByIdList(List.of(permissionVo.getRole() )).getFirst();
+            List<User> users = roleService.getUserByIdList(permissionVo.getUserList());
             roleService.roleBindingUser(role, users);
             response.setData(role);
             response.setMessage("Role binded with user successfully");
@@ -143,8 +140,8 @@ public class RoleController {
     public ResponseType<User> userBindRole(@RequestBody PermissionVo permissionVo) {
         ResponseType<User> response = new ResponseType<>();
         try {
-            User user = permissionVo.getUser();
-            List<Role> roles = permissionVo.getRoleList();
+            User user = roleService.getUserByIdList(List.of(permissionVo.getUser() )).getFirst();
+            List<Role> roles = roleService.getRoleByIdList(permissionVo.getRoleList());
             roleService.userBindRole(user, roles);
             response.setData(user);
             response.setMessage("User binded with role successfully");
@@ -160,8 +157,8 @@ public class RoleController {
     public ResponseType<Role> roleUnbindUser(@RequestBody PermissionVo permissionVo) {
         ResponseType<Role> response = new ResponseType<>();
         try {
-            Role role = permissionVo.getRole();
-            List<User> users = permissionVo.getUserList();
+            Role role =roleService.getRoleByIdList(List.of(permissionVo.getRole() )).getFirst();
+            List<User> users = roleService.getUserByIdList(permissionVo.getUserList());
             roleService.roleUnbindUser(role, users);
             response.setData(role);
             response.setMessage("Role unbinded with user successfully");
@@ -177,8 +174,8 @@ public class RoleController {
     public ResponseType<User> userUnbindRole(@RequestBody PermissionVo permissionVo) {
         ResponseType<User> response = new ResponseType<>();
         try {
-            User user = permissionVo.getUser();
-            List<Role> roles = permissionVo.getRoleList();
+            User user = roleService.getUserByIdList(List.of(permissionVo.getUser() )).getFirst();
+            List<Role> roles = roleService.getRoleByIdList(permissionVo.getRoleList());
             roleService.userUnbindRole(user, roles);
             response.setData(user);
             response.setMessage("User unbinded with role successfully");
@@ -191,13 +188,13 @@ public class RoleController {
     }
 
     @PostMapping("/roleUnbindFunction")
-    public ResponseType<Role> roleUnbindFunction(@RequestBody PermissionVo permissionVo) {
-        ResponseType<Role> response = new ResponseType<>();
+    public ResponseType<RoleOutVo> roleUnbindFunction(@RequestBody PermissionVo permissionVo) {
+        ResponseType<RoleOutVo> response = new ResponseType<>();
         try {
-            Role role = permissionVo.getRole();
-            List<Function> functions = permissionVo.getFunctionList();
+            Role role = roleService.getRoleByIdList(List.of(permissionVo.getRole() )).getFirst();
+            List<Function> functions = roleService.getFunctionByIdList(permissionVo.getFunctionList());
             roleService.roleUnbindFunction(role, functions);
-            response.setData(role);
+            response.setData(role.transToVo());
             response.setMessage("Role unbinded with function successfully");
             response.setCode(0);
         } catch (Exception e) {
@@ -211,8 +208,8 @@ public class RoleController {
     public ResponseType<Function> functionUnbindRole(@RequestBody PermissionVo permissionVo) {
         ResponseType<Function> response = new ResponseType<>();
         try {
-            Function function = permissionVo.getFunction();
-            List<Role> roles = permissionVo.getRoleList();
+            Function function = roleService.getFunctionByIdList(List.of(permissionVo.getFunction() )).getFirst();
+            List<Role> roles = roleService.getRoleByIdList(permissionVo.getRoleList());
             roleService.functionUnbindRole(function, roles);
             response.setData(function);
             response.setMessage("Function unbinded with role successfully");

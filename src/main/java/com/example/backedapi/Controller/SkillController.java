@@ -3,6 +3,7 @@ package com.example.backedapi.Controller;
 import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.model.Skill;
 import com.example.backedapi.model.Vo.ResponseType;
+import com.example.backedapi.model.Vo.SkillVo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +16,19 @@ import java.util.List;
 public class SkillController {
     private SkillService skillService;
     @PostMapping("/add")
-    public ResponseType<Skill> addSkill(@RequestBody Skill skill) {
+    public ResponseType<SkillVo> addSkill(@RequestBody Skill skill) {
         try {
-            skill=   skillService.addSkill(skill);
+            SkillVo  data=   skillService.addSkill(skill).toVo();
+            return new ResponseType<>( 0,data);
         }catch (Exception e){
             return new ResponseType<>( -1,null,"Error adding skill");
         }
 
-        return new ResponseType<>( 0,skill);
+
     }
     @GetMapping("/get")
-    public ResponseType<List<Skill>> getSkill() {
-        return new ResponseType<>( 0,skillService.getSkill());
+    public ResponseType<List<SkillVo>> getSkill() {
+        return new ResponseType<>( 0,skillService.getSkill().stream().map(Skill::toVo).toList());
     }
     @PostMapping("/update")
     public ResponseType<String> updateSkill(@RequestBody Skill skill) {

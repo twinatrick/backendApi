@@ -1,7 +1,12 @@
 package com.example.backedapi.model;
 
+import com.example.backedapi.model.Vo.FunctionVo;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -10,15 +15,19 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Entity
 @Table
+@NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 
 public class Function implements Serializable {
     @Id
@@ -27,14 +36,28 @@ public class Function implements Serializable {
     private String name="";
     private String parent="";
     private String sort="";
-    @OneToMany(mappedBy = "function", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<RoleFunction> roleFunctions;
-    @CreatedBy
+    private Integer type;
+    @JsonIgnore
+    @OneToMany(mappedBy = "function", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<RoleFunction> roleFunctions =new ArrayList<>();
     private String createdBy;
-    @LastModifiedBy
     private String updatedBy;
-    @CreatedDate
     private Date createdTime;
-    @LastModifiedDate
     private Date updatedTime;
+    public FunctionVo toVo(){
+        FunctionVo vo = new FunctionVo();
+        vo.setId(this.id.toString());
+        vo.setName(this.name);
+        vo.setParent(this.parent);
+        vo.setSort(this.sort);
+        vo.setType(this.type);
+        vo.setParentName(this.parent);
+        vo.setGrandParentId(this.parent);
+        vo.setDisabled(false);
+        vo.setEdit(false);
+        vo.setNewAdd(false);
+        vo.setNewName(this.name);
+        vo.setDelete(false);
+        return vo;
+    }
 }

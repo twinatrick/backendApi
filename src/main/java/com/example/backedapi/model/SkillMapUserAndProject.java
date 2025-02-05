@@ -1,7 +1,11 @@
 package com.example.backedapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
@@ -10,17 +14,20 @@ import java.util.UUID;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Entity
 @Table
+@NoArgsConstructor
 public class SkillMapUserAndProject  implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID key ;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     private User user;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Skill skill;
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
     private Project project;
 }

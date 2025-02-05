@@ -6,9 +6,7 @@ import com.example.backedapi.annotation.Ingnore;
 import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
 import com.example.backedapi.model.Function;
 import com.example.backedapi.model.User;
-import com.example.backedapi.model.Vo.LoginRequest;
-import com.example.backedapi.model.Vo.ResponseType;
-import com.example.backedapi.model.Vo.SignupRequest;
+import com.example.backedapi.model.Vo.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jose4j.lang.JoseException;
@@ -26,14 +24,14 @@ public class FunctionController {
     private FunctionService functionService;
 
     @PostMapping("/add")
-    public ResponseType<?> addFunction(@RequestBody Function function) {
+    public ResponseType<?> addFunction(@RequestBody FunctionVo function) {
         try {
-            function = functionService.addFunction(function);
+            FunctionVo    f = functionService.addFunction(function.toFunction()).toVo();
+            return new ResponseType<>(0, f);
         } catch (Exception e) {
             return new ResponseType<>(-1, null, "Error adding function");
         }
 
-        return new ResponseType<>(0, function);
     }
 
     @PostMapping("/update")
@@ -60,7 +58,18 @@ public class FunctionController {
     }
 
     @GetMapping("/get")
-    public ResponseType<List<Function>> getFunction() {
-        return new ResponseType<>(0, functionService.getFunction());
+    public ResponseType<List<FunctionVo>> getFunction() {
+        return new ResponseType<>(0, functionService.getFunction().stream().map(Function::toVo).toList());
+    }
+
+    @PostMapping("/saveAllFunction")
+    public ResponseType<?> saveAllFunction(@RequestBody FunctionTransVo function) {
+        functionService.deleteFunction(function.getDeleteFunction());
+        functionService.saveFunction(function.getSaveMainFunction());
+        List<FunctionVo> data= functionService.saveFunctionNewChild(function.getSaveFunctionNewChild()).stream().map(Function::toVo).toList();
+        ResponseType response = new ResponseType();
+        response.setCode(0);
+        response.setData(data);
+        return response;
     }
 }
