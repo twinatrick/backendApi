@@ -9,16 +9,24 @@ services:
         - 'POSTGRES_HOST_AUTH_METHOD=trust'
     ports:
         - '5432:5432'
-#  backend:
-##    build: .
-#    ports:
-#        - '8080:8080'
-#    depends_on:
-#        - postgres
-#    environment:
-#        - 'DATABASE_URL=postgres://postgres:verYs3cret@postgres:5432/postgres'
+  backend:
+#    build: .
+
+
+    image: backendapi0212
+    container_name: backend_api_all
+    depends_on:
+      - postgres
+
+    ports:
+      - "8000:8000"
+    networks:
+      - backend_network
 volumes:
   postgres_data:
+networks:
+  backend_network:
+
 
 #  sqlserver:
 #    image: 'mcr.microsoft.com/mssql/server:latest'

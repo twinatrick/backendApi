@@ -1,17 +1,9 @@
 package com.example.backedapi.Controller;
 
 import com.example.backedapi.Service.FunctionService;
-import com.example.backedapi.Service.UserService;
-import com.example.backedapi.annotation.Ingnore;
-import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
 import com.example.backedapi.model.Function;
-import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

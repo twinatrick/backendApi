@@ -1,18 +1,15 @@
 package com.example.backedapi.Aop;
 
 import com.example.backedapi.Service.UserService;
-import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
+import com.example.backedapi.fillter.JwtAuthenticationToken;
 import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.ResponseType;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -34,7 +31,7 @@ public class TokenCheck {
     @Autowired
     private HttpServletResponse response;
     @Autowired
-    private  JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private JwtAuthenticationToken jwtAuthenticationToken;
     @Autowired
     private  UserService userService;
     @Pointcut("execution(* com.example.backedapi.Controller.*.*(..))")
@@ -67,7 +64,7 @@ public class TokenCheck {
             }
             if(token.get() ==null|| token.get().isEmpty()) throw new NullPointerException("Token is null");
             token.set(token.get().replace("Bearer", "").trim());
-            JwtClaims claims = jwtAuthenticationTokenFilter.verifyJWT(token.get());
+            JwtClaims claims = jwtAuthenticationToken.verifyJWT(token.get());
             String email = (String) claims.getClaimValue("email");
             User user = userService.getOnlyUserByEmail(email);
             request.setAttribute("user", user);

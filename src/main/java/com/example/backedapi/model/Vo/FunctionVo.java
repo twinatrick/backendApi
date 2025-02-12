@@ -17,12 +17,12 @@ public class FunctionVo {
     private String parent="";
     private String sort="";
     private Integer type;
-    private String parentName;
-    private String grandParentId;
+    private String parentName="";
+    private String grandParentId="";
     private boolean disabled;
     private boolean edit;
     private boolean newAdd;
-    private String newName;
+    private String newName="";
     private boolean delete;
 
     public Function toFunction(){

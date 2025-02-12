@@ -3,12 +3,13 @@ package com.example.backedapi.Controller;
 
 import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.Service.UserService;
-import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
+import com.example.backedapi.fillter.JwtAuthenticationToken;
 import com.example.backedapi.model.Function;
 import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.BindUserSkillOrProject;
 import com.example.backedapi.model.Vo.ResponseType;
 import com.example.backedapi.model.Vo.UserVo;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.Cookie;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -32,16 +34,25 @@ public class UserController {
     // This is a simple controller class that
     // will be used to handle the user requests
     @Autowired
+    private ApplicationContext context;
+
+    @PostConstruct
+    public void checkBean() {
+        System.out.println("CurrentUser Bean Exists: " + context.containsBean("currentUser"));
+    }
+
+    @Autowired
     private  UserService userService;
 
     @Autowired
     private  HttpServletRequest request;
 
+
     @Autowired
     private  User currentUser;
 
     @Autowired
-    private  JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    private JwtAuthenticationToken jwtUtils;
 
     @Autowired
     private SkillService skillService;
@@ -99,6 +110,11 @@ public class UserController {
         // This method will be used to get all the users
         // from the database
         }
+    @PostMapping("/saveUser")
+    public ResponseType<String> saveUser(@RequestBody UserVo user) {
+        userService.saveUserWithRole(user);
+        return new ResponseType<>(0, "User updated successfully");
+    }
 
 
 

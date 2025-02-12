@@ -15,7 +15,8 @@ public interface UserRoleRepository extends JpaRepository<UserRole, UUID> {
 //    @Modifying
 //    @Query("delete from UserRole ur where ur.user IN ?1 and ur.role IN ?2")
 //    void deleteByUserAndRole(List<UUID> userKey, List<UUID> roleKey);
-    @Modifying
-    @Query("delete from UserRole ur where ur.user IN ?1 and ur.role IN ?2")
-    void deleteByUserAndRole(List<User> userKey, List<Role> roleKey);
+//    @Modifying
+//    @Query("delete from UserRole ur where ur.user IN ?1 and ur.role IN ?2")
+//
+    void deleteAllByUserInAndRoleIn(List<User> userKey, List<Role> roleKey);
 }

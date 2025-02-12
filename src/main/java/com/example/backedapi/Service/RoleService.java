@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
@@ -50,6 +49,9 @@ public class RoleService {
     public List<RoleOutVo> getRole() {
         return roleRepository.findAll().stream().map(Role::transToVo).toList();
 //        return roleRepository.findAll();
+    }
+    public List<Role> getRoleRestIn() {
+        return roleRepository.findAll();
     }
 
     public void updateRole(Role role) {
@@ -122,7 +124,7 @@ public class RoleService {
         if (role.getKey() == null) {
             throw new IllegalArgumentException("Key must not be null");
         }
-        userRoleRepository.deleteByUserAndRole(users, List.of(role));
+        userRoleRepository.deleteAllByUserInAndRoleIn(users, List.of(role));
         List<UserRole> userRoles = users.stream().map(user -> {
             UserRole userRole = new UserRole();
             userRole.setRole(role);
@@ -137,7 +139,7 @@ public class RoleService {
             throw new IllegalArgumentException("Key must not be null");
         }
         List<UUID> roleIds = roles.stream().map(Role::getKey).toList();
-        userRoleRepository.deleteByUserAndRole(List.of(user), roles);
+        userRoleRepository.deleteAllByUserInAndRoleIn(List.of(user), roles);
         List<UserRole> userRoles = roles.stream().map(role -> {
             UserRole userRole = new UserRole();
             userRole.setRole(role);
@@ -156,7 +158,7 @@ public class RoleService {
         List<UUID> userKeyList = users.stream().map(User::getKey).toList();
         List<UUID> roleKeyList = List.of(role.getKey());
 
-        userRoleRepository.deleteByUserAndRole(users, List.of(role));
+        userRoleRepository.deleteAllByUserInAndRoleIn(users, List.of(role));
 
     }
     @Transactional
@@ -168,7 +170,16 @@ public class RoleService {
         }
         List<UUID> roleKeyList = roles.stream().map(Role::getKey).toList();
         List<UUID> userKeyList = List.of(user.getKey());
-        userRoleRepository.deleteByUserAndRole(List.of(user), roles);
+        userRoleRepository.deleteAllByUserInAndRoleIn(List.of(user), roles);
+
+    }
+    @Transactional
+    public void userUnbindAllRole(User user) {
+        if (user.getKey() == null) {
+            throw new IllegalArgumentException("Key must not be null");
+        }
+        List<Role> roles=roleRepository.findAll();
+        userRoleRepository.deleteAllByUserInAndRoleIn(List.of(user), roles);
 
     }
     @Transactional

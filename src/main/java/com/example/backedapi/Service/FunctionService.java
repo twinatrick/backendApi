@@ -86,7 +86,9 @@ public class FunctionService {
         List<Function> f = function.stream().map(
                 functionVo -> {
                     Function temp = new Function();
-                    temp.setId(UUID.fromString(functionVo.getId()) );
+                    if (functionVo.getId() != null) {
+                        temp.setId(UUID.fromString(functionVo.getId()));
+                    }
                     temp.setName(functionVo.getName());
                     temp.setParent(functionVo.getParent());
                     temp.setSort(functionVo.getSort());

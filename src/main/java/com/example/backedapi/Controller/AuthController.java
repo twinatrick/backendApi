@@ -1,9 +1,11 @@
 package com.example.backedapi.Controller;
 
 import com.example.backedapi.Repository.UserRepository;
+import com.example.backedapi.Service.RoleService;
 import com.example.backedapi.Service.UserService;
 import com.example.backedapi.annotation.Ingnore;
-import com.example.backedapi.fillter.JwtAuthenticationTokenFilter;
+import com.example.backedapi.fillter.JwtAuthenticationToken;
+import com.example.backedapi.model.Role;
 import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.LoginRequest;
 import com.example.backedapi.model.Vo.ResponseType;
@@ -19,19 +21,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthController {
 //    @Autowired
 //    private   UserRepository userRepository;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
+
     @Autowired
     private  HttpServletResponse httpResponse;
 
@@ -41,7 +44,7 @@ public class AuthController {
 
 
     @Autowired
-    private  JwtAuthenticationTokenFilter jwtUtils;
+    private JwtAuthenticationToken jwtUtils;
     @Autowired
     private  HttpServletRequest request;
 
@@ -56,8 +59,14 @@ public class AuthController {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setCreatedTime(new Date());
+        user.setCreatedBy("system");
         String  token = jwtUtils.generateJWT(request.getEmail() );
         userService.saveUser(user);
+        List<Role> roles = roleService.getRoleRestIn();
+        roles=roles.stream().filter(role ->
+                role.getName().equals("admin")).toList();
+        roleService.userBindRole(user,roles);
         httpResponse.addHeader("Authorization", "Bearer " + token);
         HashMap<String,String> res=new HashMap<>();
         res.put("accessToken",token);

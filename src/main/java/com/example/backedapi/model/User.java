@@ -63,6 +63,7 @@ public class User implements Serializable {
         userVo.setUpdatedBy(this.updatedBy);
         userVo.setCreatedTime(this.createdTime);
         userVo.setUpdatedTime(this.updatedTime);
+        roleArr=roles.stream().map(userRole -> userRole.getRole().getKey().toString()).toList();
         userVo.setRoleArr(this.roleArr);
         userVo.setPermissions(this.permissions);
         return userVo;
