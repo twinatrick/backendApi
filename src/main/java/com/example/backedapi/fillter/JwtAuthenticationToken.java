@@ -40,14 +40,11 @@ public class JwtAuthenticationToken {
     ) throws JoseException {
         HashMap<String, String> map = new HashMap<>();
         map.put("email", user);
-
-
         JwtClaims claims = generateClaims(map, expirationTime);
         JsonWebSignature jws = new JsonWebSignature();
         jws.setKey(SECRET_KEY);
         jws.setPayload(claims.toJson());
         jws.setAlgorithmHeaderValue("HS256");
-
         return jws.getCompactSerialization();
     }
     public JwtClaims generateClaims(HashMap<String, String> map, int expirationTime){
@@ -74,12 +71,6 @@ public class JwtAuthenticationToken {
         }
     }
 
-    public String getUsernameFromToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }
+
 
 }
