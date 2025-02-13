@@ -65,11 +65,11 @@ public class UserService {
             roleService.userBindRole(user, roles);
             return;
         }
-        User user = new User();
-        user.setEmail(userVo.getEmail());
+//        User user = new User();
+//        user.setEmail(userVo.getEmail());
         List<Role> roles = roleRepository.findRoleByKeyIn(userVo.getRoleArr().stream().map(UUID::fromString).toList());
-        Example<User> example = Example.of(user);
-        User u = userRepository.findOne(example).orElseThrow();
+//        Example<User> example = Example.of(user);
+        User u = userRepository.findByEmail(userVo.getEmail()).getFirst();
 
         u.setPassword(BCrypt.hashpw(userVo.getPassword(), BCrypt.gensalt()));
         userRepository.save(u);
