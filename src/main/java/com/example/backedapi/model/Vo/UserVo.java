@@ -19,11 +19,12 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UserVo {
-    private UUID key;
+    private String key;
     private String name;
     private String email;
     private String password;
     private String phone;
+    private boolean disabled;
     private String createdBy;
     private String updatedBy;
     private Date createdTime;
@@ -32,5 +33,5 @@ public class UserVo {
 
     private List<String> roleArr;
 
-    private List<Function> permissions;
+    private List<FunctionVo> permissions;
 }

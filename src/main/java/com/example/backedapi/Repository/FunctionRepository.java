@@ -12,4 +12,7 @@ public interface FunctionRepository extends JpaRepository<Function, UUID> {
 
     @Query("select f from Function f where f.parent IN ?1")
     List<Function> findAllByGrandParentId(List<String> grandParentId);
+
+    @Query("select f from Function f where f.parent IN ?1")
+    List<Function> getParent(List<String> parent);
 }

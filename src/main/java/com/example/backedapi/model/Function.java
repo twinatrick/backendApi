@@ -52,7 +52,7 @@ public class Function implements Serializable {
         vo.setSort(this.sort);
         vo.setType(this.type);
         vo.setParentName(this.parent);
-        vo.setGrandParentId(this.parent);
+        vo.setGrandParentId("");
         vo.setDisabled(false);
         vo.setEdit(false);
         vo.setNewAdd(false);

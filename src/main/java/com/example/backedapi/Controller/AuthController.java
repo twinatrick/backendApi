@@ -16,9 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jose4j.lang.JoseException;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -38,15 +39,15 @@ public class AuthController {
     @Autowired
     private  HttpServletResponse httpResponse;
 
-    @Autowired
-
-    private  BCryptPasswordEncoder passwordEncoder;
+//    @Autowired
+//
+//    private  BCryptPasswordEncoder passwordEncoder;
 
 
     @Autowired
     private JwtAuthenticationToken jwtUtils;
-    @Autowired
-    private  HttpServletRequest request;
+//    @Autowired
+//    private  HttpServletRequest request;
 
     // 註冊
     @Ingnore
@@ -58,7 +59,7 @@ public class AuthController {
 
         User user = new User();
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()));
         user.setCreatedTime(new Date());
         user.setCreatedBy("system");
         String  token = jwtUtils.generateJWT(request.getEmail() );
@@ -80,7 +81,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseType<?> login(@RequestBody LoginRequest request) throws JoseException {
         List<User> user = userService.getUserByEmail(request.getEmail());
-        if (user.isEmpty() || !passwordEncoder.matches(request.getPassword(), user.getFirst().getPassword())) {
+        if (user.isEmpty() || !BCrypt.checkpw(request.getPassword(), user.getFirst().getPassword())) {
             return new  ResponseType<>(-1, "Invalid username or password");
         }
 

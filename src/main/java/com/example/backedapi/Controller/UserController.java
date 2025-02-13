@@ -7,6 +7,7 @@ import com.example.backedapi.fillter.JwtAuthenticationToken;
 import com.example.backedapi.model.Function;
 import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.BindUserSkillOrProject;
+import com.example.backedapi.model.Vo.FunctionVo;
 import com.example.backedapi.model.Vo.ResponseType;
 import com.example.backedapi.model.Vo.UserVo;
 import jakarta.annotation.PostConstruct;
@@ -68,30 +69,19 @@ public class UserController {
         return true;
     }
 
-    @GetMapping("/info")
-    public ResponseType<User> getUserInfo(
+    @GetMapping("/infoVo")
+    public ResponseType<UserVo> getUserInfo(
     ) {
-        User user = currentUser;
-        List<Function> functionList=new ArrayList<>();
-        String FirstId= UUID.randomUUID().toString();
-        String secondID=UUID.randomUUID().toString();
-        Function f=new Function();
-        f.setId(UUID.fromString(FirstId));
-        f.setName("System");
-        functionList.add(f);
-        Function f2=new Function();
-        f2.setId(UUID.fromString(secondID));
-        f2.setName("User");
-        f2.setParent(FirstId);
-        functionList.add(f2);
-        Function f3=new Function();
-        f3.setParent(secondID);
-        f3.setName("View");
-        functionList.add(f3);
-        user.setPermissions(functionList);
+        User user= (User) request.getAttribute("user");
+        user=userService.getOnlyUserByEmail(user.getEmail());
+        UserVo userVo = user.toUserVo();
+        List<FunctionVo> parent= userService.getAllParent(userVo.getPermissions().stream().map(FunctionVo::getId).toList());
+        userVo.getPermissions().addAll(parent);
+
+
         // This method will be used to get the user
         // information
-        return new ResponseType<>(user);
+        return new ResponseType<>(userVo);
     }
 
     @PostMapping("/BindUserSkillOrProject")

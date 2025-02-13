@@ -1,5 +1,6 @@
 package com.example.backedapi.model;
 
+import com.example.backedapi.model.Vo.FunctionVo;
 import com.example.backedapi.model.Vo.UserVo;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,6 +36,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String phone;
+    private boolean disabled =false;
     private String createdBy;
     private String updatedBy;
     private Date createdTime;
@@ -51,20 +53,27 @@ public class User implements Serializable {
 
     @JsonIgnore
     @Transient
-    private List<Function> permissions;
+    private List<FunctionVo> permissions;
 
     public UserVo toUserVo(){
         UserVo userVo = new UserVo();
-        userVo.setKey(this.key);
+        userVo.setKey(this.key.toString());
         userVo.setName(this.name);
         userVo.setEmail(this.email);
         userVo.setPhone(this.phone);
+        userVo.setDisabled(this.disabled);
         userVo.setCreatedBy(this.createdBy);
         userVo.setUpdatedBy(this.updatedBy);
         userVo.setCreatedTime(this.createdTime);
         userVo.setUpdatedTime(this.updatedTime);
+
         roleArr=roles.stream().map(userRole -> userRole.getRole().getKey().toString()).toList();
         userVo.setRoleArr(this.roleArr);
+        this.permissions = new ArrayList<>();
+        roles.forEach(
+                userRole -> userRole.getRole().getRoleFunctions().forEach(
+                        roleFunction -> this.permissions.add(roleFunction.getFunction().toVo())
+                ));
         userVo.setPermissions(this.permissions);
         return userVo;
     }
