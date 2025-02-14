@@ -10,6 +10,8 @@ import com.example.backedapi.model.User;
 import com.example.backedapi.model.Vo.FunctionVo;
 import com.example.backedapi.model.Vo.UserVo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -39,17 +41,15 @@ public class UserService {
     public List<User> getUser() {
         return userRepository.findAll();
     }
-
-
     public List<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-
+    @Cacheable(value = "users", key = "#email")
     public User getOnlyUserByEmail(String email) {
         List<User> users = userRepository.findByEmail(email);
         return users.getFirst();
     }
-
+    @CachePut(value = "users", key = "#user.email")
     public void saveUser(User user) {
         userRepository.save(user);
     }
