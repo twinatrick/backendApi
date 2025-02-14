@@ -1,4 +1,4 @@
-package com.example.backedapi.Controller.WebSocket;
+package com.example.backedapi.WebSocket;
 
 import com.example.backedapi.Util.AlarmMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,6 +1,6 @@
 package com.example.backedapi;
 
-import com.example.backedapi.Controller.WebSocket.AlarmWebSocket;
+import com.example.backedapi.WebSocket.AlarmWebSocket;
 import com.example.backedapi.Util.AlarmMessage;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;

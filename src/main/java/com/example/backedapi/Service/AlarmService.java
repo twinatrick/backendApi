@@ -1,8 +1,7 @@
 package com.example.backedapi.Service;
 
-import com.example.backedapi.Controller.WebSocket.AlarmWebSocket;
+import com.example.backedapi.WebSocket.AlarmWebSocket;
 import com.example.backedapi.Util.AlarmMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
