@@ -1,4 +1,4 @@
-package com.example.backedapi.Controller;
+package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.ProjectService;
 import com.example.backedapi.model.db.Project;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/project")
+@RequestMapping("/backend/project")
 public class ProjectController {
     private ProjectService projectService;
     @PostMapping("/add")

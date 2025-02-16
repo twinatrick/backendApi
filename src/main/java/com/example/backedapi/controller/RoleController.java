@@ -1,4 +1,4 @@
-package com.example.backedapi.Controller;
+package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.RoleService;
 import com.example.backedapi.model.db.Function;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/role")
+@RequestMapping("/backend/role")
 public class RoleController {
     @Autowired
     private RoleService roleService;

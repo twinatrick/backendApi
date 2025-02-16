@@ -1,4 +1,4 @@
-package com.example.backedapi.Controller;
+package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.RoleService;
 import com.example.backedapi.Service.UserService;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/backend/auth")
 public class AuthController {
 //    @Autowired
 //    private   UserRepository userRepository;

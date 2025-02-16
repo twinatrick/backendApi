@@ -1,4 +1,4 @@
-package com.example.backedapi.Controller;
+package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.FunctionService;
 import com.example.backedapi.model.db.Function;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/function")
+@RequestMapping("/backend/function")
 public class FunctionController {
     @Autowired
     private FunctionService functionService;

@@ -132,4 +132,11 @@ public class FunctionService {
         System.out.println("saveFunctionNewChildTime=" + (( new Date().getTime() - date.getTime())/1000) + "\n");
         return  functionRepository.findAll(sort) ;
     }
+        public Function getFunctionByName(String name) {
+            return functionRepository.findFunctionByName(name);
+        }
+
+        public Function getFunctionByNameAndParent(String name, String parent) {
+            return functionRepository.findFunctionByNameAndParent(name, parent);
+        }
     }

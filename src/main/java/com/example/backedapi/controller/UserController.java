@@ -1,5 +1,5 @@
 
-package com.example.backedapi.Controller;
+package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.Service.UserService;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/backend/users")
 public class UserController {
     // This is a simple controller class that
     // will be used to handle the user requests

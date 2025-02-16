@@ -39,7 +39,7 @@ public class RoleService {
             throw new IllegalArgumentException("Name already exists");
         }
         role.setCreatedTime(new Date());
-        role.setCreatedBy(currentUser.getEmail());
+//        role.setCreatedBy(currentUser.getEmail());
 
         return roleRepository.save(role);
 
@@ -89,12 +89,16 @@ public class RoleService {
         if (role.getKey() == null) {
             throw new IllegalArgumentException("Key must not be null");
         }
+        role = roleRepository.findById(role.getKey()).orElseThrow(
+                () -> new IllegalArgumentException("Role not found")
+        );
         roleFunctionRepository.deleteByFunctionAndRole( functions ,List.of(role));
         List<UUID> functionIds = functions.stream().map(Function::getId).toList();
         functions = functionRepository.findAllById(functionIds);
+        Role finalRole = role;
         List<RoleFunction> roleFunctions = functions.stream().map(function -> {
             RoleFunction roleFunction = new RoleFunction();
-            roleFunction.setRole(role);
+            roleFunction.setRole(finalRole);
             roleFunction.setFunction(function);
             return roleFunction;
         }).toList();
@@ -258,5 +262,8 @@ public class RoleService {
     public List<User> getUserByIdList(List<String> keyList){
         List<UUID> keyList1 = keyList.stream().map(UUID::fromString).toList();
         return userRepository.findAllById(keyList1);
+    }
+    public Role getRoleByName(String name){
+        return roleRepository.findRoleByName(name);
     }
 }

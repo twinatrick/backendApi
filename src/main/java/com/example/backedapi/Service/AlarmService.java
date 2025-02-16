@@ -1,29 +1,27 @@
 package com.example.backedapi.Service;
 
-import com.example.backedapi.WebSocket.AlarmWebSocket;
 import com.example.backedapi.Util.AlarmMessage;
+import com.example.backedapi.WebSocket.AlarmWebSocket;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class AlarmService {
 
-
+    @Autowired
+    private ProducerService producerService;
 
     // 可以使用消息隊列、異步執行器等來處理
-    public void processAlarm(AlarmMessage alarmMessage) {
-        // 先記錄到資料庫或日誌
-        saveAlarm(alarmMessage);
-        AlarmWebSocket.broadcast(alarmMessage);
 
-        // 根據告警等級進行通知
-//        if ("ERROR".equalsIgnoreCase(alarmMessage.getLevel())) {
-//            alarmWebSocket.broadcast(alarmMessage);
-//
-//        } else if ("WARN".equalsIgnoreCase(alarmMessage.getLevel())) {
-//        } else {
-//            // 其它情況可能僅記錄日誌
-//            logAlarm(alarmMessage);
-//        }
+    public void processAlarm(List<AlarmMessage> alarmMessage) {
+        try {
+            producerService.sendMessage(alarmMessage);
+        } catch (Exception e) {
+            alarmMessage.get(0).setMessage("告警消息發送失敗：" + e.getMessage());
+        }
+
     }
 
     private void saveAlarm(AlarmMessage alarmMessage) {

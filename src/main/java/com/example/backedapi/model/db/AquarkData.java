@@ -2,18 +2,21 @@ package com.example.backedapi.model.db;
 
 import com.example.backedapi.model.Vo.aquarkUse.aquarkDataRaw;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
 @Entity
-public class AquarkData {
+public class AquarkData  implements Serializable {
     @Id
+    @GeneratedValue
     private UUID key;
 
     private String station_id;//站點

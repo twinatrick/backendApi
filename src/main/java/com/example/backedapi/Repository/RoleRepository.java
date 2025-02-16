@@ -10,4 +10,6 @@ import java.util.UUID;
 public interface RoleRepository extends JpaRepository<Role, UUID> {
     @Query("select r from Role r where r.key in ?1")
     List<Role> findRoleByKeyIn(List<UUID> keys);
+
+    Role findRoleByName(String name);
 }

@@ -34,7 +34,7 @@ public class TokenCheck {
     private JwtAuthenticationToken jwtAuthenticationToken;
     @Autowired
     private  UserService userService;
-    @Pointcut("execution(* com.example.backedapi.Controller.*.*(..))")
+    @Pointcut("execution(* com.example.backedapi.controller.*.*(..))")
     void pointcut(){
     }
 

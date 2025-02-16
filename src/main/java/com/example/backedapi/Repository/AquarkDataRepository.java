@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface AquarkDataRepository extends JpaRepository<AquarkData, UUID> {
 
     @Query(value = "from AquarkData where station_id = ?1 AND  trans_time = ?2 ")
-    AquarkData findAquarkDataByStation_idAndTrans_time(
+    List<AquarkData> findAquarkDataByStation_idAndTrans_time(
             String station_id, Date trans_time);
 
 

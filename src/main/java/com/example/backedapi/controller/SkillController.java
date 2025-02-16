@@ -1,4 +1,4 @@
-package com.example.backedapi.Controller;
+package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.model.db.Skill;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/skill")
+@RequestMapping("/backend/skill")
 public class SkillController {
     private SkillService skillService;
     @PostMapping("/add")
