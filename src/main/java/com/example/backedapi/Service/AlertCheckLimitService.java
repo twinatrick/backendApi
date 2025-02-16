@@ -5,6 +5,7 @@ import com.example.backedapi.Util.AlarmMessage;
 import com.example.backedapi.WebSocket.AlarmWebSocket;
 import com.example.backedapi.model.db.AlertCheckLimit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,23 @@ public class AlertCheckLimitService {
             AlertCheckLimit limit= alertCheckLimitRepository.save(alertCheckLimit);
             return limit;
         }
-        alertCheckLimitRepository.save(alertCheckLimit);
-        return alertCheckLimit;
+        AlertCheckLimit limit= limitList.getFirst();
+        limit.setLimitValue(limitValue);
+        alertCheckLimitRepository.save(limit);
+        return limit;
+    }
+    @CachePut(value = "alertCheckLimit", key = "#alertCheckLimit.tableName + '.' + #alertCheckLimit.columnName")
+    public AlertCheckLimit update(AlertCheckLimit alertCheckLimit) {
+        return alertCheckLimitRepository.save(alertCheckLimit);
     }
 
     public List<AlertCheckLimit> getLimit() {
         return alertCheckLimitRepository.findAll();
+    }
+
+    @CacheEvict(value = "alertCheckLimit", key = "#alertCheckLimit.tableName + '.' + #alertCheckLimit.columnName")
+    public void deleteLimit(AlertCheckLimit alertCheckLimit) {
+        alertCheckLimitRepository.delete(alertCheckLimit);
     }
 
 

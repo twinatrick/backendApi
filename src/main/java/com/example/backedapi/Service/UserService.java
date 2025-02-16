@@ -31,6 +31,7 @@ public class UserService {
     private final RoleService roleService;
 
     private final FunctionRepository functionRepository;
+    @CachePut(value = "users", key = "#user.email")
     public void createUser(User user) {
         userRepository.save(user);
     }
@@ -41,12 +42,12 @@ public class UserService {
     public List<User> getUserByEmail(String email) {
         return userRepository.findByEmail(email);
     }
-    @Cacheable(value = "users", key = "#email")
+//    @Cacheable(value = "users", key = "#email")
     public User getOnlyUserByEmail(String email) {
         List<User> users = userRepository.findByEmail(email);
         return users.getFirst();
     }
-    @CachePut(value = "users", key = "#user.email")
+//    @CachePut(value = "users", key = "#user.email")
     public void saveUser(User user) {
         userRepository.save(user);
     }
@@ -78,13 +79,13 @@ public class UserService {
     public List<FunctionVo> getAllParent(List<String> child){
         List<UUID> childUUID = child.stream().map(UUID::fromString).toList();
         List<Function> functions = functionRepository.findAllById(childUUID);
-        List<UUID> parentUUID = functions.stream().map(Function::getParent).map(UUID::fromString).toList();
+        List<UUID> parentUUID = functions.stream().map(Function::getParent).filter(parent -> !parent.isEmpty()).map(UUID::fromString).toList();
         List<Function> parentFunctions = functionRepository.findAllById(parentUUID);
 
 
         List<String> result = new ArrayList<>(parentFunctions.stream().map(Function::getId).map(UUID::toString).toList());
         parentFunctions.stream().map(Function::getParent).forEach(result::add);
-        List<Function> parentParentFunctions = functionRepository.findAllById(result.stream().map(UUID::fromString).toList());
+        List<Function> parentParentFunctions = functionRepository.findAllById(result.stream().filter((x)->!x.isEmpty()).map(UUID::fromString).toList());
 
 
         return parentParentFunctions.stream().map(Function::toVo).toList();

@@ -1,5 +1,6 @@
 package com.example.backedapi.model.db;
 
+import com.example.backedapi.model.Vo.AlertCheckLimitVo;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,4 +22,10 @@ public class AlertCheckLimit  implements Serializable {
     private String columnName;
 
     private double limitValue;
+
+    public AlertCheckLimitVo toVo() {
+        return new AlertCheckLimitVo(this.key, this.tableName, this.columnName, this.limitValue);
+    }
+
+
 }
