@@ -1,4 +1,4 @@
-package com.example.backedapi.model;
+package com.example.backedapi.model.db;
 
 import com.example.backedapi.model.Vo.FunctionVo;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;

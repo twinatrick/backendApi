@@ -1,7 +1,7 @@
 package com.example.backedapi.Controller;
 
 import com.example.backedapi.Service.ProjectService;
-import com.example.backedapi.model.Project;
+import com.example.backedapi.model.db.Project;
 import com.example.backedapi.model.Vo.ResponseType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

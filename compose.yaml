@@ -9,23 +9,23 @@ services:
         - 'POSTGRES_HOST_AUTH_METHOD=trust'
     ports:
         - '5432:5432'
-  backend:
-#    build: .
-
-
-    image: backendapi0212
-    container_name: backend_api_all
-    depends_on:
-      - postgres
-
-    ports:
-      - "8000:8000"
-    networks:
-      - backend_network
+#  backend:
+##    build: .
+#
+#
+#    image: backendapi0212
+#    container_name: backend_api_all
+#    depends_on:
+#      - postgres
+#
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - backend_network
 volumes:
   postgres_data:
-networks:
-  backend_network:
+#networks:
+#  backend_network:
 
 
 #  sqlserver:

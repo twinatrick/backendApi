@@ -2,8 +2,7 @@ package com.example.backedapi.Service;
 
 import com.example.backedapi.Repository.FunctionRepository;
 import com.example.backedapi.Repository.RoleFunctionRepository;
-import com.example.backedapi.model.Function;
-import com.example.backedapi.model.RoleFunction;
+import com.example.backedapi.model.db.Function;
 import com.example.backedapi.model.Vo.FunctionVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;

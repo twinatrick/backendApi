@@ -4,22 +4,19 @@ import com.example.backedapi.Repository.FunctionRepository;
 import com.example.backedapi.Repository.RoleRepository;
 import com.example.backedapi.Repository.UserRepository;
 import com.example.backedapi.Repository.UserRoleRepository;
-import com.example.backedapi.model.Function;
-import com.example.backedapi.model.Role;
-import com.example.backedapi.model.User;
+import com.example.backedapi.model.db.Function;
+import com.example.backedapi.model.db.Role;
+import com.example.backedapi.model.db.User;
 import com.example.backedapi.model.Vo.FunctionVo;
 import com.example.backedapi.model.Vo.UserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.mindrot.jbcrypt.BCrypt;
 

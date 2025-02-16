@@ -2,10 +2,8 @@ package com.example.backedapi.Service;
 
 import com.example.backedapi.Repository.ProjectRepository;
 import com.example.backedapi.Repository.SkillMapUserAndProjectRepository;
-import com.example.backedapi.Repository.SkillRepository;
-import com.example.backedapi.model.Project;
-import com.example.backedapi.model.Skill;
-import com.example.backedapi.model.SkillMapUserAndProject;
+import com.example.backedapi.model.db.Project;
+import com.example.backedapi.model.db.SkillMapUserAndProject;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;

@@ -1,12 +1,11 @@
 package com.example.backedapi.Controller;
 
 import com.example.backedapi.Service.FunctionService;
-import com.example.backedapi.model.Function;
+import com.example.backedapi.model.db.Function;
 import com.example.backedapi.model.Vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

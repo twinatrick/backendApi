@@ -1,7 +1,6 @@
 package com.example.backedapi.Repository;
 
-import com.example.backedapi.model.Function;
-import com.example.backedapi.model.SkillMapUserAndProject;
+import com.example.backedapi.model.db.SkillMapUserAndProject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

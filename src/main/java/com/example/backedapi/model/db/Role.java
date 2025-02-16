@@ -1,4 +1,4 @@
-package com.example.backedapi.model;
+package com.example.backedapi.model.db;
 
 import com.example.backedapi.model.Vo.RoleOutVo;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -7,12 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
 import java.util.ArrayList;

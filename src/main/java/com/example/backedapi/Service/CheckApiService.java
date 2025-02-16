@@ -47,6 +47,7 @@ public class CheckApiService {
         alarmMessage.setTimestamp(new Date());
         alarmService.processAlarm(alarmMessage);
         for (aquarkDataRaw data : aquarkDataRawList) {
+            data.toDataBase();
             alarmMessage = new AlarmMessage();
             alarmMessage.setLevel("INFO");
             String dataString = objectMapper.writeValueAsString(data);

@@ -1,20 +1,14 @@
-package com.example.backedapi.model;
+package com.example.backedapi.model.db;
 
 import com.example.backedapi.model.Vo.FunctionVo;
 import com.example.backedapi.model.Vo.UserVo;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
 import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.*;
-import org.springframework.data.annotation.AccessType;
 
 import java.io.Serializable;
 import java.util.ArrayList;

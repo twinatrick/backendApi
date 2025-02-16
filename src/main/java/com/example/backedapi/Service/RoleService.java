@@ -1,9 +1,8 @@
 package com.example.backedapi.Service;
 
 import com.example.backedapi.Repository.*;
-import com.example.backedapi.model.*;
 import com.example.backedapi.model.Vo.RoleOutVo;
-import lombok.RequiredArgsConstructor;
+import com.example.backedapi.model.db.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;

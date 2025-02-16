@@ -1,8 +1,6 @@
 package com.example.backedapi.model.Vo;
 
-import com.example.backedapi.model.Function;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.Entity;
+import com.example.backedapi.model.db.Function;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

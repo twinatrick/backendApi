@@ -1,10 +1,9 @@
 package com.example.backedapi.Controller;
 
 import com.example.backedapi.Service.SkillService;
-import com.example.backedapi.model.Skill;
+import com.example.backedapi.model.db.Skill;
 import com.example.backedapi.model.Vo.ResponseType;
 import com.example.backedapi.model.Vo.SkillVo;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

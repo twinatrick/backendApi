@@ -1,12 +1,9 @@
 package com.example.backedapi.Repository;
 
-import com.example.backedapi.model.Project;
-import com.example.backedapi.model.Role;
-import com.example.backedapi.model.User;
-import com.example.backedapi.model.UserRole;
+import com.example.backedapi.model.db.Role;
+import com.example.backedapi.model.db.User;
+import com.example.backedapi.model.db.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.UUID;

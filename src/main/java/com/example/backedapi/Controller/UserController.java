@@ -4,29 +4,19 @@ package com.example.backedapi.Controller;
 import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.Service.UserService;
 import com.example.backedapi.fillter.JwtAuthenticationToken;
-import com.example.backedapi.model.Function;
-import com.example.backedapi.model.User;
+import com.example.backedapi.model.db.User;
 import com.example.backedapi.model.Vo.BindUserSkillOrProject;
 import com.example.backedapi.model.Vo.FunctionVo;
 import com.example.backedapi.model.Vo.ResponseType;
 import com.example.backedapi.model.Vo.UserVo;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.Cookie;
-import lombok.Getter;
-import lombok.Setter;
-import org.jose4j.jwt.JwtClaims;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 @RestController

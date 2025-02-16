@@ -1,6 +1,6 @@
 package com.example.backedapi.Repository;
 
-import com.example.backedapi.model.User;
+import com.example.backedapi.model.db.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

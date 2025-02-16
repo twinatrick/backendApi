@@ -1,20 +1,15 @@
 package com.example.backedapi.Controller;
 
-import com.example.backedapi.Repository.UserRepository;
 import com.example.backedapi.Service.RoleService;
 import com.example.backedapi.Service.UserService;
 import com.example.backedapi.annotation.Ingnore;
 import com.example.backedapi.fillter.JwtAuthenticationToken;
-import com.example.backedapi.model.Role;
-import com.example.backedapi.model.User;
+import com.example.backedapi.model.db.Role;
+import com.example.backedapi.model.db.User;
 import com.example.backedapi.model.Vo.LoginRequest;
 import com.example.backedapi.model.Vo.ResponseType;
 import com.example.backedapi.model.Vo.SignupRequest;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jose4j.lang.JoseException;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping("/auth")

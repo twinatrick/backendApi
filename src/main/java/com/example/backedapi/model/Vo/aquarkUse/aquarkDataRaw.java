@@ -1,9 +1,11 @@
 package com.example.backedapi.model.Vo.aquarkUse;
 
+import com.example.backedapi.model.db.AquarkData;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,7 +13,7 @@ import java.util.UUID;
 @Setter
 public class aquarkDataRaw {
     @Id
-    private UUID key;
+    private String key;
 
     private String station_id;//站點
     private String CSQ;
@@ -34,4 +36,53 @@ public class aquarkDataRaw {
     private float v5;//太陽能板 1
     private float v6;//太陽能板 1
     private float v7;
+    private boolean isPeak;//是否為尖峰
+
+    public AquarkData toDataBase() {
+        AquarkData aquarkData = new AquarkData();
+        if(this.key != null) {
+            aquarkData.setKey(UUID.fromString(this.key));
+        }
+        aquarkData.setStation_id(this.station_id);
+        aquarkData.setCSQ(this.CSQ);
+        aquarkData.setTrans_time(this.trans_time);
+        aquarkData.setRain_d(this.rain_d);
+        aquarkData.setMoisture(this.moisture);
+        aquarkData.setTemperature(this.temperature);
+        aquarkData.setEcho(this.echo);
+        aquarkData.setWaterSpeedAquark(this.waterSpeedAquark);
+        aquarkData.setV1(this.v1);
+        aquarkData.setV2(this.v2);
+        aquarkData.setV3(this.v3);
+        aquarkData.setV4(this.v4);
+        aquarkData.setV5(this.v5);
+        aquarkData.setV6(this.v6);
+        aquarkData.setV7(this.v7);
+        aquarkData.setPeak(this.isPeakCheck());
+        return aquarkData;
+    }
+
+    private boolean isPeakCheck(){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(this.trans_time);
+        int day=cal.getFirstDayOfWeek();
+        int week=cal.get(Calendar.DAY_OF_WEEK)-day;
+        if (week==4||week==5 ){
+            return true;
+        }else if (week==6||week==0) {
+            return false;
+        }
+        int year=cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH);
+        int day1=cal.get(Calendar.DAY_OF_MONTH);
+
+        Calendar start=Calendar.getInstance();
+        Calendar end=Calendar.getInstance();
+        start.set(year,month,day1,7,30,0);
+        end.set(year,month,day1,17,30,0);
+        long start1=start.getTimeInMillis();
+        long end1=end.getTimeInMillis();
+        long centerTime=cal.getTimeInMillis();
+        return centerTime >= start1 && centerTime <= end1;
+    }
 }

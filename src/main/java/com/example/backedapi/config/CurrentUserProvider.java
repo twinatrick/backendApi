@@ -1,10 +1,9 @@
 package com.example.backedapi.config;
 
-import com.example.backedapi.model.User;
+import com.example.backedapi.model.db.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.annotation.RequestScope;
 
