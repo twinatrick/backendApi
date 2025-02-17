@@ -19,12 +19,14 @@ public class AquarkDataController {
     private final AquarkDataService aquarkDataService;
 
     @PostMapping("/getData")
-    public List<AquarkDataRaw> getAlertCheckLimitData(@RequestBody List<CriteriaAPIFilter> fillterList) {
-        return aquarkDataService.getAquarkDataWithFilter(fillterList);
+    public ResponseType<List<AquarkDataRaw>> getData(@RequestBody List<CriteriaAPIFilter> fillterList) {
+
+
+        return new ResponseType<>(aquarkDataService.getAquarkDataWithFilter(fillterList));
     }
 
     @GetMapping("/getColumnNameList")
-    public List<String> getColumnNameList() {
-        return aquarkDataService.getColumnNameList();
+    public ResponseType<List<String>> getColumnNameList() {
+        return new ResponseType<>(aquarkDataService.getColumnNameList());
     }
 }

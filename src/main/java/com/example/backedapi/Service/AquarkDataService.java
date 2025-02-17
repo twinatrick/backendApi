@@ -3,6 +3,7 @@ package com.example.backedapi.Service;
 import com.example.backedapi.Repository.AquarkDataRepository;
 import com.example.backedapi.model.Vo.aquarkUse.AquarkDataRaw;
 import com.example.backedapi.model.Vo.aquarkUse.CriteriaAPIFilter;
+import com.example.backedapi.model.Vo.aquarkUse.AverageAquark;
 import com.example.backedapi.model.db.AquarkData;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,7 +35,7 @@ public class AquarkDataService {
     }
 
     public List<String> getColumnNameList() {
-        Field[] declaredFields =AquarkData.class.getDeclaredFields();
+        Field[] declaredFields = AquarkData.class.getDeclaredFields();
         Field[] fields = AquarkData.class.getFields();
         List<String> columnNameList = new ArrayList<>();
         for (Field field : declaredFields) {
@@ -45,6 +48,49 @@ public class AquarkDataService {
 
         return columnNameList;
     }
+
+    List<AverageAquark> getAverageAquark(Date start, Date end) {
+        CriteriaAPIFilter criteriaAPIFilterStart = new CriteriaAPIFilter();
+        criteriaAPIFilterStart.setColumnName("trans_time");
+        criteriaAPIFilterStart.setType(2);
+        criteriaAPIFilterStart.setLarge(true);
+        criteriaAPIFilterStart.setEqual(true);
+        criteriaAPIFilterStart.setDate(start);
+        CriteriaAPIFilter criteriaAPIFilterEnd = new CriteriaAPIFilter();
+        criteriaAPIFilterEnd.setColumnName("trans_time");
+        criteriaAPIFilterEnd.setType(2);
+        criteriaAPIFilterEnd.setSmall(true);
+        criteriaAPIFilterEnd.setEqual(true);
+        criteriaAPIFilterEnd.setDate(end);
+        List<CriteriaAPIFilter> criteriaAPIFilterList = new ArrayList<>();
+        criteriaAPIFilterList.add(criteriaAPIFilterStart);
+        criteriaAPIFilterList.add(criteriaAPIFilterEnd);
+        List<AquarkDataRaw> rawList = getAquarkDataWithFilter(criteriaAPIFilterList);
+        List<AverageAquark> avangeList = rawList.stream().map(AquarkDataRaw::toAverageAquark).toList();
+        Map<String, List<AverageAquark>> collect = avangeList.stream()
+                .collect(Collectors.groupingBy((a) -> a.getStation_id() + a.getDate()));
+        avangeList = collect.values().stream().map(a -> {
+            AverageAquark averageAquark = new AverageAquark();
+            averageAquark.setStation_id(a.getFirst().getStation_id());
+            averageAquark.setDate(a.getFirst().getDate());
+            averageAquark.setRain_d((float) a.stream().mapToDouble(AverageAquark::getRain_d).max().orElse(0) / 24);
+            averageAquark.setMoisture((float) a.stream().mapToDouble(AverageAquark::getMoisture).average().orElse(0));
+            averageAquark.setTemperature((float) a.stream().mapToDouble(AverageAquark::getTemperature).average().orElse(0));
+            averageAquark.setEcho((float) a.stream().mapToDouble(AverageAquark::getEcho).average().orElse(0));
+            averageAquark.setWaterSpeedAquark((float) a.stream().mapToDouble(AverageAquark::getWaterSpeedAquark).average().orElse(0));
+            averageAquark.setV1((float) a.stream().mapToDouble(AverageAquark::getV1).average().orElse(0));
+            averageAquark.setV2((float) a.stream().mapToDouble(AverageAquark::getV2).average().orElse(0));
+            averageAquark.setV3((float) a.stream().mapToDouble(AverageAquark::getV3).average().orElse(0));
+            averageAquark.setV4((float) a.stream().mapToDouble(AverageAquark::getV4).average().orElse(0));
+            averageAquark.setV5((float) a.stream().mapToDouble(AverageAquark::getV5).average().orElse(0));
+            averageAquark.setV6((float) a.stream().mapToDouble(AverageAquark::getV6).average().orElse(0));
+            averageAquark.setV7((float) a.stream().mapToDouble(AverageAquark::getV7).average().orElse(0));
+            return averageAquark;
+        }).toList();
+
+        return avangeList;
+    }
+
     public List<AquarkDataRaw> getAquarkDataWithFilter(List<CriteriaAPIFilter> fillterList) {
         if (fillterList.isEmpty()) {
             return getAquarkData();
@@ -92,7 +138,7 @@ public class AquarkDataService {
                 } else {
                     cb.notEqual(root.get(colName), f.getDate());
                 }
-            } else if (f.getType()==3) {
+            } else if (f.getType() == 3) {
                 if (f.isEqual()) {
                     cb.equal(root.get(colName), f.isBooleanValue());
                 } else {
@@ -126,7 +172,8 @@ public class AquarkDataService {
         aquarkDataNeedUpdateData.setMoisture(aquarkData.getMoisture());
         aquarkDataNeedUpdateData.setTemperature(aquarkData.getTemperature());
         aquarkDataNeedUpdateData.setEcho(aquarkData.getEcho());
-        aquarkDataNeedUpdateData.setWaterSpeedAquark(aquarkData.getWaterSpeedAquark());
+        float abs = Math.abs(aquarkData.getWaterSpeedAquark());
+        aquarkDataNeedUpdateData.setWaterSpeedAquark(abs);
         aquarkDataNeedUpdateData.setV1(aquarkData.getV1());
         aquarkDataNeedUpdateData.setV2(aquarkData.getV2());
         aquarkDataNeedUpdateData.setV3(aquarkData.getV3());

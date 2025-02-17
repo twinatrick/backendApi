@@ -85,4 +85,41 @@ public class AquarkDataRaw {
         long centerTime=cal.getTimeInMillis();
         return centerTime >= start1 && centerTime <= end1;
     }
+
+    private String DateToString(Date date){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(date);
+        int year=cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH);
+        int day=cal.get(Calendar.DAY_OF_MONTH);
+        return year+"-"+month+"-"+day;
+    }
+    private String DateHourToString(Date date){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(date);
+        int year=cal.get(Calendar.YEAR);
+        int month=cal.get(Calendar.MONTH);
+        int day=cal.get(Calendar.DAY_OF_MONTH);
+        int hour=cal.get(Calendar.HOUR_OF_DAY);
+        return year+"-"+month+"-"+day+" "+hour;
+    }
+    public AverageAquark toAverageAquark(){
+        AverageAquark averageAquark=new AverageAquark();
+        averageAquark.setStation_id(this.station_id);
+        averageAquark.setDate(DateToString(this.trans_time));
+        averageAquark.setDateHour(DateHourToString(this.trans_time));
+        averageAquark.setRain_d(this.rain_d);
+        averageAquark.setMoisture(this.moisture);
+        averageAquark.setTemperature(this.temperature);
+        averageAquark.setEcho(this.echo);
+        averageAquark.setWaterSpeedAquark(this.waterSpeedAquark);
+        averageAquark.setV1(this.v1);
+        averageAquark.setV2(this.v2);
+        averageAquark.setV3(this.v3);
+        averageAquark.setV4(this.v4);
+        averageAquark.setV5(this.v5);
+        averageAquark.setV6(this.v6);
+        averageAquark.setV7(this.v7);
+        return averageAquark;
+    }
 }
