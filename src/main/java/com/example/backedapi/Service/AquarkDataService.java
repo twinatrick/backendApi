@@ -26,11 +26,11 @@ public class AquarkDataService {
     @Autowired
     private EntityManager entityManager;
 
-    List<AquarkDataRaw> getAquarkData() {
+    public List<AquarkDataRaw> getAquarkData() {
         return aquarkDataRepository.findAll().stream().map(AquarkData::toVo).collect(Collectors.toList());
     }
 
-    List<AquarkDataRaw> getAquarkDataWithFilter(List<CriteriaAPIFilter> fillterList) {
+    public List<AquarkDataRaw> getAquarkDataWithFilter(List<CriteriaAPIFilter> fillterList) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<AquarkData> query = cb.createQuery(AquarkData.class);
         Root<AquarkData> root = query.from(AquarkData.class);
@@ -82,7 +82,9 @@ public class AquarkDataService {
                 }
             }
         });
-        return null;
+        query.where(cb.and(predicates.toArray(new Predicate[0])));
+
+        return entityManager.createQuery(query).getResultList().stream().map(AquarkData::toVo).collect(Collectors.toList());
     }
 
 
