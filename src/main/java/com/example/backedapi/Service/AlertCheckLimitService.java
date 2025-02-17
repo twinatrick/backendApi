@@ -18,15 +18,15 @@ public class AlertCheckLimitService {
     @Autowired
     private AlertCheckLimitRepository alertCheckLimitRepository;
 
-    @Cacheable(value = "alertCheckLimit",key = "#dbName + '.' + #column" )
-    public AlertCheckLimit getLimit(String dbName, String column) {
-        return alertCheckLimitRepository.findAlertCheckLimitByTableNameAndColumnName(dbName,column).getFirst();
+    @Cacheable(value = "alertCheckLimit",key = "#tableName + '.' + #column" )
+    public AlertCheckLimit getLimit(String tableName, String column) {
+        return alertCheckLimitRepository.findAlertCheckLimitByTableNameAndColumnName(tableName,column).getFirst();
     }
 
-    @CachePut(value = "alertCheckLimit", key = "#dbName + '.' + #column")
-    public AlertCheckLimit insertLimit(String dbName, String column, double limitValue) {
+    @CachePut(value = "alertCheckLimit", key = "#tableName + '.' + #column")
+    public AlertCheckLimit insertLimit(String tableName, String column, double limitValue) {
         AlertCheckLimit alertCheckLimit = new AlertCheckLimit();
-        alertCheckLimit.setTableName(dbName);
+        alertCheckLimit.setTableName(tableName);
         alertCheckLimit.setColumnName(column);
         alertCheckLimit.setLimitValue(limitValue);
         List<AlertCheckLimit> limitList= alertCheckLimitRepository.findAlertCheckLimitByTableNameAndColumnName(alertCheckLimit.getTableName(),alertCheckLimit.getColumnName());
