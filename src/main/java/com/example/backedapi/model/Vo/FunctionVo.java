@@ -25,7 +25,8 @@ public class FunctionVo {
 
     public Function toFunction(){
         Function function = new Function();
-        function.setId(UUID.fromString(this.id));
+        if (this.id !=null)
+            function.setId(UUID.fromString(this.id));
         function.setName(this.name);
         function.setParent(this.parent);
         function.setSort(this.sort);

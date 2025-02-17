@@ -1,12 +1,9 @@
 package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.AlertCheckLimitService;
-import com.example.backedapi.Service.SkillService;
 import com.example.backedapi.model.Vo.AlertCheckLimitVo;
 import com.example.backedapi.model.Vo.ResponseType;
-import com.example.backedapi.model.Vo.SkillVo;
 import com.example.backedapi.model.db.AlertCheckLimit;
-import com.example.backedapi.model.db.Skill;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,32 +22,30 @@ public class AlertCheckLimitlController {
             AlertCheckLimit  data=   alertCheckLimitService.insertLimit(alertCheckLimitVo.getTableName(),alertCheckLimitVo.getColumnName(),alertCheckLimitVo.getLimitValue());
             return new ResponseType<>( 0,data.toVo());
         }catch (Exception e){
-            return new ResponseType<>( -1,null,"Error adding skill");
+            return new ResponseType<>( -1,null,"Error adding limit");
         }
     }
     @GetMapping("/get")
-    public ResponseType<List<AlertCheckLimitVo>> getSkill() {
+    public ResponseType<List<AlertCheckLimitVo>> getLimit() {
         return new ResponseType<>( 0,alertCheckLimitService.getLimit().stream().map(AlertCheckLimit::toVo).toList());
     }
     @PostMapping("/update")
-    public ResponseType<String> updateSkill(@RequestBody AlertCheckLimitVo alertCheckLimitVo) {
+    public ResponseType<AlertCheckLimitVo> updateLimit(@RequestBody AlertCheckLimitVo alertCheckLimitVo) {
         try {
-            alertCheckLimitService.update(alertCheckLimitVo.toDb());
+            return new ResponseType<>( 0,alertCheckLimitService.update(alertCheckLimitVo.toDb()).toVo());
         }catch (Exception e){
-            return new ResponseType<>( -1,"Error updating skill");
+            return new ResponseType<>( -1,null,"Error updating limit");
         }
-
-        return new ResponseType<>( 0,"Skill updated successfully");
     }
 
     @PostMapping("/delete")
-    public ResponseType<String> deleteSkill(@RequestBody AlertCheckLimitVo alertCheckLimitVo) {
+    public ResponseType<String> deleteLimit(@RequestBody AlertCheckLimitVo alertCheckLimitVo) {
         try {
             alertCheckLimitService.deleteLimit(alertCheckLimitVo.toDb());
         }catch (Exception e){
-            return new ResponseType<>( -1,"Error deleting skill");
+            return new ResponseType<>( -1,"Error deleting limit");
         }
 
-        return new ResponseType<>( 0,"Skill deleted successfully");
+        return new ResponseType<>( 0,"limit deleted successfully");
     }
 }
