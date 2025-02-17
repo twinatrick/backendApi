@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,24 @@ public class AquarkDataService {
         return aquarkDataRepository.findAll().stream().map(AquarkData::toVo).collect(Collectors.toList());
     }
 
+    public List<String> getColumnNameList() {
+        Field[] declaredFields =AquarkData.class.getDeclaredFields();
+        Field[] fields = AquarkData.class.getFields();
+        List<String> columnNameList = new ArrayList<>();
+        for (Field field : declaredFields) {
+            columnNameList.add(field.getName());
+        }
+        for (Field field : fields) {
+            columnNameList.add(field.getName());
+        }
+
+
+        return columnNameList;
+    }
     public List<AquarkDataRaw> getAquarkDataWithFilter(List<CriteriaAPIFilter> fillterList) {
+        if (fillterList.isEmpty()) {
+            return getAquarkData();
+        }
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<AquarkData> query = cb.createQuery(AquarkData.class);
         Root<AquarkData> root = query.from(AquarkData.class);
