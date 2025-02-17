@@ -32,19 +32,6 @@ public class AverageAquark {
         private float v6;//太陽能板 1
         private float v7;
 
-//
-//        private float rain_d_avg_hour;//日小時平均雨量
-//        private float moisture_avg_hour;//日小時平均濕度
-//        private float temperature_avg_hour;//日小時平均溫度
-//        private float echo_avg_hour;//日小時平均水位空高
-//        private float waterSpeedAquark_avg_hour;//日小時平均水流速
-//        private float v1_avg_hour;//日小時平均鋰電池電壓
-//        private float v2_avg_hour;
-//        private float v3_avg_hour;
-//        private float v4_avg_hour;
-//        private float v5_avg_hour;//日小時平均太陽能板 1
-//        private float v6_avg_hour;//日小時平均太陽能板 1
-//        private float v7_avg_hour;
 
 
     }

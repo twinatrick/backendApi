@@ -28,9 +28,9 @@ public class CheckTime {
 //        while (calendar.getTime().before(now)) {
 //            calendar.add(Calendar.HOUR_OF_DAY, 1);
 //        }
-        while (calendar.getTime().before(now)) {
-            calendar.add(Calendar.HOUR_OF_DAY, 30);
-        }
+//        while (calendar.getTime().before(now)) {
+//            calendar.add(Calendar.HOUR_OF_DAY, 30);
+//        }
         Date setTime = new Date(calendar.getTimeInMillis());
         timer.schedule(checkApi, setTime, 60 * 60 * 1000);
         System.out.printf("CheckTime.start: %s\n", setTime);

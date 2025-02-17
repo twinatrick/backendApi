@@ -2,10 +2,13 @@ package com.example.backedapi.controller;
 
 import com.example.backedapi.Service.AlertCheckLimitService;
 import com.example.backedapi.Service.AquarkDataService;
+import com.example.backedapi.annotation.Ingnore;
 import com.example.backedapi.model.Vo.AlertCheckLimitVo;
 import com.example.backedapi.model.Vo.ResponseType;
 import com.example.backedapi.model.Vo.aquarkUse.AquarkDataRaw;
+import com.example.backedapi.model.Vo.aquarkUse.AverageAquark;
 import com.example.backedapi.model.Vo.aquarkUse.CriteriaAPIFilter;
+import com.example.backedapi.model.Vo.aquarkUse.twoTime;
 import com.example.backedapi.model.db.AlertCheckLimit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +31,11 @@ public class AquarkDataController {
     @GetMapping("/getColumnNameList")
     public ResponseType<List<String>> getColumnNameList() {
         return new ResponseType<>(aquarkDataService.getColumnNameList());
+    }
+    @Ingnore
+
+    @PostMapping("/getAverage")
+    public ResponseType<List<AverageAquark>> getAverage(@RequestBody twoTime time) {
+        return new ResponseType<>(aquarkDataService.getAverageAquark(time.getStart(), time.getEnd()));
     }
 }

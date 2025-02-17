@@ -49,7 +49,7 @@ public class AquarkDataService {
         return columnNameList;
     }
 
-    List<AverageAquark> getAverageAquark(Date start, Date end) {
+    public  List<AverageAquark> getAverageAquark(Date start, Date end) {
         CriteriaAPIFilter criteriaAPIFilterStart = new CriteriaAPIFilter();
         criteriaAPIFilterStart.setColumnName("trans_time");
         criteriaAPIFilterStart.setType(2);
@@ -111,38 +111,38 @@ public class AquarkDataService {
                 }
             } else if (f.getType() == 1) {
                 if (f.isLarge() && f.isEqual()) {
-                    cb.greaterThanOrEqualTo(root.get(colName), f.getDoubleValue());
+                    predicates.add(  cb.greaterThanOrEqualTo(root.get(colName), f.getDoubleValue()));
                 } else if (f.isLarge()) {
-                    cb.greaterThan(root.get(colName), f.getDoubleValue());
+                    predicates.add(cb.greaterThan(root.get(colName), f.getDoubleValue()));
                 } else if (f.isSmall() && f.isEqual()) {
-                    cb.lessThanOrEqualTo(root.get(colName), f.getDoubleValue());
+                    predicates.add(cb.lessThanOrEqualTo(root.get(colName), f.getDoubleValue()));
                 } else if (f.isSmall()) {
-                    cb.lessThan(root.get(colName), f.getDoubleValue());
+                    predicates.add(cb.lessThan(root.get(colName), f.getDoubleValue()));
                 } else if (f.isEqual()) {
-                    cb.equal(root.get(colName), f.getDoubleValue());
+                    predicates.add( cb.equal(root.get(colName), f.getDoubleValue()));
                 } else {
-                    cb.notEqual(root.get(colName), f.getDoubleValue());
+                    predicates.add( cb.notEqual(root.get(colName), f.getDoubleValue()));
                 }
 
             } else if (f.getType() == 2) {
                 if (f.isLarge() && f.isEqual()) {
-                    cb.greaterThanOrEqualTo(root.get(colName), f.getDate());
+                    predicates.add(cb.greaterThanOrEqualTo(root.get(colName), f.getDate()));
                 } else if (f.isLarge()) {
-                    cb.greaterThan(root.get(colName), f.getDate());
+                    predicates.add(cb.greaterThan(root.get(colName), f.getDate()));
                 } else if (f.isSmall() && f.isEqual()) {
-                    cb.lessThanOrEqualTo(root.get(colName), f.getDate());
+                    predicates.add(cb.lessThanOrEqualTo(root.get(colName), f.getDate()));
                 } else if (f.isSmall()) {
-                    cb.lessThan(root.get(colName), f.getDate());
+                    predicates.add(cb.lessThan(root.get(colName), f.getDate()));
                 } else if (f.isEqual()) {
-                    cb.equal(root.get(colName), f.getDate());
+                    predicates.add( cb.equal(root.get(colName), f.getDate()));
                 } else {
-                    cb.notEqual(root.get(colName), f.getDate());
+                    predicates.add(cb.notEqual(root.get(colName), f.getDate()));
                 }
             } else if (f.getType() == 3) {
                 if (f.isEqual()) {
-                    cb.equal(root.get(colName), f.isBooleanValue());
+                    predicates.add(cb.equal(root.get(colName), f.isBooleanValue()));
                 } else {
-                    cb.notEqual(root.get(colName), f.isBooleanValue());
+                    predicates.add( cb.notEqual(root.get(colName), f.isBooleanValue()));
                 }
             }
         });
