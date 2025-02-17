@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
-public class aquarkDataRaw {
+public class AquarkDataRaw {
     @Id
     private String key;
 

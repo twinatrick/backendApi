@@ -1,6 +1,6 @@
 package com.example.backedapi.model.db;
 
-import com.example.backedapi.model.Vo.aquarkUse.aquarkDataRaw;
+import com.example.backedapi.model.Vo.aquarkUse.AquarkDataRaw;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -41,8 +41,8 @@ public class AquarkData  implements Serializable {
     private float v6;//太陽能板 1
     private float v7;
 
-    public aquarkDataRaw toVo() {
-        aquarkDataRaw aquarkDataRaw = new aquarkDataRaw();
+    public AquarkDataRaw toVo() {
+        AquarkDataRaw aquarkDataRaw = new AquarkDataRaw();
         aquarkDataRaw.setKey(this.key.toString());
         aquarkDataRaw.setStation_id(this.station_id);
         aquarkDataRaw.setCSQ(this.CSQ);

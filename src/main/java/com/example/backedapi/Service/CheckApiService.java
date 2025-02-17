@@ -4,7 +4,7 @@ import com.example.backedapi.Util.AlarmMessage;
 import com.example.backedapi.Util.CallApi;
 import com.example.backedapi.model.Vo.aquarkUse.RowData;
 import com.example.backedapi.model.Vo.aquarkUse.aquarkApiReturnVo;
-import com.example.backedapi.model.Vo.aquarkUse.aquarkDataRaw;
+import com.example.backedapi.model.Vo.aquarkUse.AquarkDataRaw;
 import com.example.backedapi.model.db.AquarkData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,7 +34,7 @@ public class CheckApiService {
                 "https://app.aquark.com.tw/api/raw/Angle2024/240709",
                 "https://app.aquark.com.tw/api/raw/Angle2024/240710");
         System.out.println("CheckApiService.getAquarkApiData");
-        List<aquarkDataRaw> aquarkDataRawList = new ArrayList<>();
+        List<AquarkDataRaw> aquarkDataRawList = new ArrayList<>();
         for (String url : urlList) {
             String result = getApiOnlyUrl(url);
             aquarkApiReturnVo aquarkApiReturnVo =objectMapper.readValue(result, aquarkApiReturnVo.class);
@@ -44,7 +43,7 @@ public class CheckApiService {
 
         }
         List<AlarmMessage> alarmMessages = new ArrayList<>();
-        for (aquarkDataRaw data : aquarkDataRawList) {
+        for (AquarkDataRaw data : aquarkDataRawList) {
             AquarkData aquarkData= aquarkDataService.insertAquarkData(data.toDataBase());
             alarmMessages.addAll(checkValue(aquarkData)) ;
         }

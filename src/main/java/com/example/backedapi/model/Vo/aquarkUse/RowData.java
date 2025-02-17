@@ -1,6 +1,5 @@
 package com.example.backedapi.model.Vo.aquarkUse;
 
-import com.example.backedapi.model.Vo.aquarkUse.Sensor;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,8 +22,8 @@ public class RowData {
     @JsonProperty("sensor")
     private Sensor sensor;
 
-    public aquarkDataRaw transToDbData() {
-        aquarkDataRaw data = new aquarkDataRaw();
+    public AquarkDataRaw transToDbData() {
+        AquarkDataRaw data = new AquarkDataRaw();
         data.setStation_id(this.station_id);
         data.setCSQ(this.CSQ);
         data.setObs_time(this.obs_time);
