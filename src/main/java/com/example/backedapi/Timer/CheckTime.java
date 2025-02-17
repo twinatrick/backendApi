@@ -25,9 +25,9 @@ public class CheckTime {
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-//        while (calendar.getTime().before(now)) {
-//            calendar.add(Calendar.HOUR_OF_DAY, 1);
-//        }
+        while (calendar.getTime().before(now)) {
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
+        }
 //        while (calendar.getTime().before(now)) {
 //            calendar.add(Calendar.HOUR_OF_DAY, 30);
 //        }
