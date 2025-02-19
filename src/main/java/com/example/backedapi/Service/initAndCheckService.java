@@ -71,27 +71,40 @@ public class initAndCheckService {
             });
         }
     }
+    public boolean checkIsExist(String oneLayer, String twoLayer, String threeLayer) {
+        Function one= functionService.getFunctionByName(oneLayer);
+        if (one == null) {
+            return false;
+        }
+        Function two = functionService.getFunctionByNameAndParent(twoLayer, one.getId().toString());
+
+        if (two == null) {
+            return false;
+        }
+        Function three = functionService.getFunctionByNameAndParent(threeLayer, two.getId().toString());
+        if (three == null) {
+            return false;
+        }
+        return true;
+    }
 
     public void checkFunctionBindDefaultRole() {
         List<Function> functionList = functionService.getFunction();
-        if (functionList.isEmpty()) {
-            List<String> functionListStr = new ArrayList<>( List.of("System", "User", "View"));
-            insertFunctionByList(functionListStr,"");
-            functionListStr = new ArrayList<>( List.of("System", "RolePermission", "View"));
-            insertFunctionByList(functionListStr,"");
-            functionList= functionService.getFunction();
-            Role role = roleService.getRoleByName("admin");
-            roleService.roleBindFunction(role,functionList);
+        List<List<String>> allFunctionList = new ArrayList<>();
+        allFunctionList.add(new ArrayList<>( List.of("System", "User", "View")));
+        allFunctionList.add(new ArrayList<>( List.of("System", "RolePermission", "View")));
+        allFunctionList.add(new ArrayList<>( List.of("DataView", "AquarkData", "View")));
+        allFunctionList.add(new ArrayList<>( List.of("DataView", "AquarkDataAvg", "View")));
 
 
-
+        for (List<String> functionListStr : allFunctionList) {
+            if (!checkIsExist(functionListStr.get(0), functionListStr.get(1), functionListStr.get(2))) {
+                insertFunctionByList(functionListStr,"");
+            }
         }
-
-        // 檢查功能是否綁定默認角色
-        // 1. 從資料庫讀取功能
-        // 2. 從資料庫讀取角色
-        // 3. 檢查功能是否綁定默認角色
-        // 4. 如果未綁定，則綁定默認角色
+        functionList= functionService.getFunction();
+        Role role = roleService.getRoleByName("admin");
+        roleService.roleBindFunction(role,functionList);
     }
     public void insertFunctionByList(List<String> functionList , String parent) {
         if (functionList.isEmpty()) {

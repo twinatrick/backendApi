@@ -137,6 +137,10 @@ public class FunctionService {
         }
 
         public Function getFunctionByNameAndParent(String name, String parent) {
-            return functionRepository.findFunctionByNameAndParent(name, parent);
+            List<Function> functionList = functionRepository.findFunctionByNameAndParent(name, parent);
+            if (functionList.isEmpty()) {
+                return null;
+            }
+            return functionList.getFirst();
         }
     }

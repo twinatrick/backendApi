@@ -23,7 +23,9 @@ services:
     restart: always
     ports:
       - "6379:6379"
-    command: redis-server --requirepass your_password
+#    command: redis-server --requirepass redisPd
+    environment:
+      - REDIS_PASSWORD=redisPd
 #    networks:
 #      - my_network
 
@@ -75,7 +77,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: verYs3cret
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      REDIS_PASSWORD: your_password
+      REDIS_PASSWORD: redisPd
 
 
       KAFKA_BOOTSTRAP_SERVERS: localhost:9092
