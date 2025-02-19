@@ -162,7 +162,6 @@ public class AquarkDataService {
 
         float abs = Math.abs(aquarkData.getWaterSpeedAquark());
         aquarkData.setWaterSpeedAquark(abs);
-        // 更新數據庫
         AquarkData aquarkDataGet=getAquarkData(aquarkData);
         if (aquarkDataGet==null) {
             return updateAquarkData(aquarkData);
@@ -198,6 +197,7 @@ public class AquarkDataService {
         return aquarkDataList.isEmpty() ? null : aquarkDataList.getFirst();
     }
 
+    // 更新數據庫
     @CachePut(value = "aquarkData", key = "#aquarkData.station_id + '_' + #aquarkData.trans_time.toString()")
     public AquarkData updateAquarkData(AquarkData aquarkData) {
         return aquarkDataRepository.save(aquarkData);
