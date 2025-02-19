@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -60,10 +61,14 @@ public class initAndCheckService {
             alertCheckLimitService.insertLimit("aquark_data", "v5", 10);
             alertCheckLimitService.insertLimit("aquark_data", "v6", 10);
             alertCheckLimitService.insertLimit("aquark_data", "v7", 10);
-
-
-
         }
+        String [] a= {"rain_d","moisture","temperature","echo","water_speed_aquark","v1","v2","v3","v4","v5","v6","v7"};
+        Arrays.stream(a).forEach(s -> {
+            AlertCheckLimit alertCheckLimit = alertCheckLimitService.getLimit("aquark_data", s);
+            if (alertCheckLimit == null) {
+                alertCheckLimitService.insertLimit("aquark_data", s, 10);
+            }
+        });
     }
 
     public void checkFunctionBindDefaultRole() {
