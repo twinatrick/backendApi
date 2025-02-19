@@ -158,39 +158,49 @@ public class AquarkDataService {
         return true;
     }
 
-    @CachePut(value = "aquarkData", key = "#aquarkData.station_id + '_' + #aquarkData.trans_time.toString()")
     public AquarkData insertAquarkData(AquarkData aquarkData) {
-        // 更新數據庫
-        List<AquarkData> aquarkDataList = aquarkDataRepository.findAquarkDataByStation_idAndTrans_time(aquarkData.getStation_id(), aquarkData.getTrans_time());
-        if (aquarkDataList.isEmpty()) {
-            aquarkDataRepository.save(aquarkData);
-            return aquarkData;
-        }
-        AquarkData aquarkDataNeedUpdateData = aquarkDataList.getFirst();
-        aquarkDataNeedUpdateData.setCSQ(aquarkData.getCSQ());
-        aquarkDataNeedUpdateData.setRain_d(aquarkData.getRain_d());
-        aquarkDataNeedUpdateData.setMoisture(aquarkData.getMoisture());
-        aquarkDataNeedUpdateData.setTemperature(aquarkData.getTemperature());
-        aquarkDataNeedUpdateData.setEcho(aquarkData.getEcho());
+
         float abs = Math.abs(aquarkData.getWaterSpeedAquark());
-        aquarkDataNeedUpdateData.setWaterSpeedAquark(abs);
-        aquarkDataNeedUpdateData.setV1(aquarkData.getV1());
-        aquarkDataNeedUpdateData.setV2(aquarkData.getV2());
-        aquarkDataNeedUpdateData.setV3(aquarkData.getV3());
-        aquarkDataNeedUpdateData.setV4(aquarkData.getV4());
-        aquarkDataNeedUpdateData.setV5(aquarkData.getV5());
-        aquarkDataNeedUpdateData.setV6(aquarkData.getV6());
-        aquarkDataNeedUpdateData.setV7(aquarkData.getV7());
-        aquarkDataNeedUpdateData.setPeak(aquarkData.isPeak());
-        aquarkDataRepository.save(aquarkDataNeedUpdateData);
-        return aquarkDataNeedUpdateData;
+        aquarkData.setWaterSpeedAquark(abs);
+        // 更新數據庫
+        AquarkData aquarkDataGet=getAquarkData(aquarkData);
+        if (aquarkDataGet==null) {
+            return updateAquarkData(aquarkData);
+        }
+
+        aquarkDataGet.setCSQ(aquarkData.getCSQ());
+        aquarkDataGet.setRain_d(aquarkData.getRain_d());
+        aquarkDataGet.setMoisture(aquarkData.getMoisture());
+        aquarkDataGet.setTemperature(aquarkData.getTemperature());
+        aquarkDataGet.setEcho(aquarkData.getEcho());
+        aquarkDataGet.setWaterSpeedAquark(abs);
+        aquarkDataGet.setV1(aquarkData.getV1());
+        aquarkDataGet.setV2(aquarkData.getV2());
+        aquarkDataGet.setV3(aquarkData.getV3());
+        aquarkDataGet.setV4(aquarkData.getV4());
+        aquarkDataGet.setV5(aquarkData.getV5());
+        aquarkDataGet.setV6(aquarkData.getV6());
+        aquarkDataGet.setV7(aquarkData.getV7());
+        aquarkDataGet.setPeak(aquarkData.isPeak());
+        aquarkDataGet= updateAquarkData(aquarkDataGet);
+
+        return aquarkDataGet;
 
 
     }
 
     @Cacheable(value = "aquarkData", key = "#aquarkData.station_id + '_' + #aquarkData.trans_time.toString()")
     public AquarkData getAquarkData(AquarkData aquarkData) {
-        return aquarkDataRepository.findAquarkDataByStation_idAndTrans_time(aquarkData.getStation_id(), aquarkData.getTrans_time()).getFirst();
+        if (aquarkData.getStation_id() == null || aquarkData.getTrans_time() == null) {
+            return null;
+        }
+        List<AquarkData> aquarkDataList = aquarkDataRepository.findAquarkDataByStation_idAndTrans_time(aquarkData.getStation_id(), aquarkData.getTrans_time());
+        return aquarkDataList.isEmpty() ? null : aquarkDataList.getFirst();
+    }
+
+    @CachePut(value = "aquarkData", key = "#aquarkData.station_id + '_' + #aquarkData.trans_time.toString()")
+    public AquarkData updateAquarkData(AquarkData aquarkData) {
+        return aquarkDataRepository.save(aquarkData);
     }
 
 
