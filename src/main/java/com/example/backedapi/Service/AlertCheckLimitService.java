@@ -20,6 +20,9 @@ public class AlertCheckLimitService {
 
     @Cacheable(value = "alertCheckLimit",key = "#tableName + '.' + #column" )
     public AlertCheckLimit getLimit(String tableName, String column) {
+        if (alertCheckLimitRepository.findAlertCheckLimitByTableNameAndColumnName(tableName,column).isEmpty()) {
+            return null;
+        }
         return alertCheckLimitRepository.findAlertCheckLimitByTableNameAndColumnName(tableName,column).getFirst();
     }
 

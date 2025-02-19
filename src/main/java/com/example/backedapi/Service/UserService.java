@@ -67,7 +67,7 @@ public class UserService {
 //        user.setEmail(userVo.getEmail());
         List<Role> roles = roleRepository.findRoleByKeyIn(userVo.getRoleArr().stream().map(UUID::fromString).toList());
 //        Example<User> example = Example.of(user);
-        User u = userRepository.findByEmail(userVo.getEmail()).getFirst();
+        User u = getOnlyUserByEmail(userVo.getEmail());
 
         u.setPassword(BCrypt.hashpw(userVo.getPassword(), BCrypt.gensalt()));
         userRepository.save(u);

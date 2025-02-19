@@ -1,65 +1,67 @@
 version: "3.9"
+
 services:
   postgres:
     image: 'postgres:latest'
+    container_name: postgres_db
+    restart: always
     environment:
-        - 'POSTGRES_USER=postgres'
-        - 'POSTGRES_PASSWORD=verYs3cret'
-        - 'POSTGRES_DB=postgres'
-        - 'POSTGRES_HOST_AUTH_METHOD=trust'
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: verYs3cret
+      POSTGRES_DB: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-        - '5432:5432'
-    networks:
-      - my_network
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+#    networks:
+#      - my_network
+
   redis:
     image: "redis:latest"
     container_name: redis_container
     restart: always
     ports:
       - "6379:6379"
-    environment:
-      - REDIS_PASSWORD=redisPd
-    networks:
-      - my_network
+    command: redis-server --requirepass your_password
+#    networks:
+#      - my_network
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
     container_name: zookeeper
+    restart: always
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
     ports:
       - "2181:2181"
-    networks:
-      - my_network
+#    networks:
+#      - my_network
 
   kafka:
     image: confluentinc/cp-kafka:7.2.1
     container_name: kafka
+    restart: always
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
     environment:
-      # 設定 Broker ID（可自定義）
       KAFKA_BROKER_ID: 1
-      # 連接到 zookeeper 的地址
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      # 對外宣告的連線地址（若在本地測試，可設置為 localhost:9092）
+      KAFKA_ZOOKEEPER_CONNECT: localhost:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-      # 默認主題的副本數，測試環境可設為 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    networks:
-      - my_network
-        # 可選：調整內部緩衝區大小、批次設定等
-        # KAFKA_BATCH_SIZE: 16384
-        # KAFKA_LINGER_MS: 1
+#    networks:
+#      - my_network
+
   backend:
     build: .
-
-
     image: backendapi0212
     container_name: backend_api_all
+    restart: always
     depends_on:
       - postgres
       - redis
@@ -68,18 +70,20 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DB_URL: jdbc:postgresql://postgres:5432/mydatabase
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: verYs3cret
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: your_password
+
+
+      KAFKA_BOOTSTRAP_SERVERS: localhost:9092
+#    networks:
+#      - my_network
 
 volumes:
   postgres_data:
 
 networks:
   my_network:
-#  sqlserver:
-#    image: 'mcr.microsoft.com/mssql/server:latest'
-#    environment:
-#      - 'ACCEPT_EULA=yes'
-#      - 'MSSQL_PID=express'
-#      - 'MSSQL_SA_PASSWORD=verYs3cret'
-#    ports:
-#      - '1433'
