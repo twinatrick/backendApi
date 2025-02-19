@@ -25,12 +25,12 @@ public class CheckTime {
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        while (calendar.getTime().before(now)) {
-            calendar.add(Calendar.HOUR_OF_DAY, 1);
-        }
 //        while (calendar.getTime().before(now)) {
-//            calendar.add(Calendar.HOUR_OF_DAY, 30);
+//            calendar.add(Calendar.HOUR_OF_DAY, 1);
 //        }
+        while (calendar.getTime().before(now)) {
+            calendar.add(Calendar.SECOND, 10);
+        }
         Date setTime = new Date(calendar.getTimeInMillis());
         timer.schedule(checkApi, setTime, 60 * 60 * 1000);
         System.out.printf("CheckTime.start: %s\n", setTime);
