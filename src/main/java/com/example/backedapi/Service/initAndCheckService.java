@@ -95,6 +95,7 @@ public class initAndCheckService {
         allFunctionList.add(new ArrayList<>( List.of("System", "RolePermission", "View")));
         allFunctionList.add(new ArrayList<>( List.of("DataView", "AquarkData", "View")));
         allFunctionList.add(new ArrayList<>( List.of("DataView", "AquarkDataAvg", "View")));
+        allFunctionList.add(new ArrayList<>( List.of("System", "LimitSetting", "View")));
 
 
         for (List<String> functionListStr : allFunctionList) {
